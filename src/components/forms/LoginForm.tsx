@@ -12,8 +12,6 @@ interface LoginFormProps {
 }
 export default function LoginForm({
     loading,
-    setloading,
-    setError
 }: LoginFormProps){
     return (
         <Tabs defaultValue="login" className="space-y-4">
