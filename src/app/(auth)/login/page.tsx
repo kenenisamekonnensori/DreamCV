@@ -21,11 +21,7 @@ export default function LoginPage() {
             </Alert>
             )} */}
 
-            <LoginForm 
-              loading={false}
-              setloading={() => {}}
-              setError={() => {}}
-            />
+            <LoginForm />
           </div>
        </div>
     );
