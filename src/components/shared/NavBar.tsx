@@ -32,27 +32,28 @@ export default function NavBar() {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <div className="flex space-x-4 items-center">
-                        <Link href={'/'}>
+                    <div className="flex space-x-4 items-center ">
+                        <Link href={'/'} className="text-[#d6dde3] hover:scale-103 transition-all duration-100 hover:text-blue-500">
                             Home
                         </Link>
-                        <Link href={'/#feature'}>
+                        <Link href={'/#feature'} className="text-[#d6dde3] hover:scale-103 transition-all duration-100 hover:text-blue-500">
                             Feature
                         </Link>
-                        <Link href={'/#template'}>
+                        <Link href={'/#template'} className="text-[#d6dde3] hover:scale-103 transition-all duration-100 hover:text-blue-500">
                             Template
                         </Link>
-                        <Link href={'/#pricing'}>
+                        <Link href={'/#pricing'} className="text-[#d6dde3] hover:scale-103 transition-all duration-100 hover:text-blue-500">
                             Pricing
                         </Link>
                         <div className="flex space-x-4 items-center">
                             <Button asChild className="hover:bg-emerald-400 hover:text-white cursor-pointer" variant={"outline"}>
                                 <Link href={'/login'}>Login</Link>
                             </Button>
-                            <Button asChild className="hover:bg-emerald-400 hover:text-white cursor-pointer">
+                            <Button asChild className=" bg-[#486772] hover:bg-emerald-400 hover:text-white cursor-pointer">
                                 <Link href={'/signup'}>Get Started</Link>
                             </Button>
                         </div>
+                        
                     </div>
 
                 </div>

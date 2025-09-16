@@ -1,15 +1,17 @@
+import Link from "next/dist/client/link"
 import { Button } from "./ui/button"
 export function Hero() {
     return (
-        <section className="relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24 bg-gradient-to-br from-[#f0f4f8] to-white">
-            <div
+        <section className="relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24 bg-[#042536]">
+            {/* bg-gradient-to-br from-[#f0f4f8] to-white */}
+            {/* <div
                 className="absolute inset-0 z-0"
                 style={{
                     backgroundImage:
                         "radial-gradient(circle at 25px 25px, rgba(167, 139, 250, 0.1) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(13, 148, 136, 0.1) 2%, transparent 0%)",
                     backgroundSize: "100px 100px",
                 }}
-            />
+            /> */}
             <div className="max-w-6xl mx-auto my-12">
                 <div className="flex flex-col items-center gap-12 lg:flex-row lg:items-start">
                     <div className="flex-1 space-y-6 text-center lg:text-left">
@@ -23,12 +25,13 @@ export function Hero() {
                             AI-powered platform. Get personalized templates, expert guidance, 
                             and land your dream job faster.
                         </p>
+                        
                         <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
-                        <Button size="lg" className="px-8 py-6 text-lg rounded-xl">
-                            Create Your Resume
+                        <Button size="lg" className="px-8 py-6 text-lg rounded-xl hover:scale-105 transition-all duration-300 hover:bg-blue-600 cursor-pointer">
+                            <Link href="/resume/generate">Create Your Resume</Link>
                         </Button>
-                        <Button variant="outline" size="lg" className="px-8 py-6 text-lg rounded-xl">
-                            Explore Templates
+                        <Button variant="outline" size="lg" className="px-8 py-6 text-lg rounded-xl hover:scale-105 transition-all duration-300 hover:bg-gray-100 cursor-pointer">
+                            <Link href="/templates">Explore Templates</Link>
                         </Button>
                         </div>
 

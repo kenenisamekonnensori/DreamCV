@@ -1,9 +1,10 @@
 'use client'
 
 import { useRef, useEffect, useState } from "react";
-import { useActionState } from "react";
 import { Mail, Lock, Loader2 } from "lucide-react";
 import { signUpAction, State } from "@/lib/actions";
+import { signInAction } from "@/lib/actions";
+import { useActionState}  from "react";
 
 import { Tabs, TabsTrigger, TabsContent, TabsList } from "../ui/tabs";
 import { Label } from "../ui/label";
@@ -13,6 +14,8 @@ import { Button } from "../ui/button";
 export default function LoginForm() {
   const initialState: State = { errors: {}, message: null };
   const [state, formAction, pending] = useActionState(signUpAction, initialState);
+
+  const [loginState, loginAction, loginPending] = useActionState(signInAction, initialState);
 
   // Control tab switching
   const [activeTab, setActiveTab] = useState("login");
@@ -37,7 +40,7 @@ export default function LoginForm() {
 
       {/* LOGIN FORM */}
       <TabsContent value="login">
-        <form action="" className="space-y-6">
+        <form action={loginAction} className="space-y-6">
           {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="loginEmail">Email</Label>

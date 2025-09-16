@@ -1,9 +1,12 @@
 'use server'
 
-import { z, ZodError } from 'zod';
+import { email, z, ZodError } from 'zod';
 import { prisma } from './prisma';
 import bcrypt from 'bcryptjs';
-
+import { signIn } from '@/auth';
+import { redirect } from 'next/navigation';
+import { AuthError } from 'next-auth';
+import { error } from 'console';
 
 const FromSchema = z.object({
     name: z.string().min(1, 'Name is required'),
@@ -31,18 +34,24 @@ function toFieldErrors(err: ZodError): FieldErrors {
 }
 
 export type State = {
-  errors?: FieldErrors;
+  errors?: {
+    name?: string
+    email?: string
+    password?: string
+    form?: string
+  } | undefined;
   message?: string | null;
 }
     
-export async function signUpAction(preState: State, formData: FormData) {
+export async function signUpAction(preState: State, formData: FormData): Promise<State> {
     const data = {
         name: formData.get('name'),
         email: formData.get('email'),
         password: formData.get('password'),
         // confirmPassword: formData.get('confirmPassword'),
     }
-
+    
+    const errors: State['errors'] = {}
     const result = FromSchema.safeParse(data);
 
     if (!result.success) {
@@ -78,3 +87,36 @@ export async function signUpAction(preState: State, formData: FormData) {
       message: 'User created successfully',
     };
   }
+
+  export async function signInAction(preState: State, formData: FormData): Promise<State> {
+    const parsed = FromSchema.safeParse({
+      email: formData.get('email'),
+      password: formData.get('password'),
+    });
+
+    if(!parsed.success) {
+      const errors = toFieldErrors(parsed.error); 
+      return { ...preState, errors };
+    }
+
+    try{
+      await signIn('credentials', {
+        email: parsed.data.email,
+        password: parsed.data.password,
+        redirectTo: '/'
+      })
+    } catch(e) {
+      if (e instanceof AuthError) return {...preState, message: "Invalid email or password" };
+      return { ...preState, message: "Something went wrong" };
+    }
+
+    return {
+      ...preState,
+      message: "Logged in Successefully"
+    }
+  };
+
+export async function loginWithGoogle() {
+  "use server";
+  await signIn("google", { redirectTo: "/dashboard" });
+}
