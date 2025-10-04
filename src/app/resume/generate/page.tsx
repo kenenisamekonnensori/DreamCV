@@ -29,6 +29,7 @@ import { Plus, Trash2, Save, ChevronRight, ChevronLeft, FileText } from "lucide-
 import { ResumePreview } from "@/components/ResumePreview";
 import { GeneratedResume } from "@/components/ResumePreview";
 import type { SubmitHandler, Resolver } from "react-hook-form";
+import Link from "next/link";
 
 /** --------------------------------------
  * Zod Schemas (Production-grade validation)
@@ -365,8 +366,9 @@ export default function ResumeFormPage() {
 
   return (
     <>
+    
     {!generated ? (
-    <div className="mx-auto max-w-6xl p-4 sm:p-8 mt-32 ">
+    <div className="mx-auto max-w-6xl p-4 sm:p-8 ">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">AI Resume Generator</h1>
@@ -374,8 +376,14 @@ export default function ResumeFormPage() {
         </div>
         <div className="hidden gap-2 sm:flex">
           <Button
+            className="hover:scale-105 transition-all cursor-pointer duration-500"
+          >
+            <Link href="/">Home</Link>
+          </Button>
+          <Button
             type="button"
             variant="secondary"
+            className="hover:scale-105 transition-all cursor-pointer duration-500"
             onClick={() => {
               localStorage.removeItem(draftKey);
               reset(defaultValues);
@@ -385,6 +393,7 @@ export default function ResumeFormPage() {
           </Button>
           <Button
             type="button"
+            className="hover:scale-105 transition-all cursor-pointer duration-500"
             onClick={() => {
               try {
                 localStorage.setItem(draftKey, JSON.stringify(getValues()));
@@ -903,7 +912,7 @@ export default function ResumeFormPage() {
           </Button>
 
           {stepIndex < steps.length - 1 ? (
-            <Button type="button" onClick={next}>
+            <Button type="button" className="hover:scale-105 transition-all cursor-pointer duration-500" onClick={next}>
               Next <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           ) : (

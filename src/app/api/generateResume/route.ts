@@ -1,14 +1,4 @@
-// ============================
-// INSTALLS (run once)
-// ============================
-// npm i @react-pdf/renderer @google/generative-ai
-// (You already have Tailwind + shadcn/ui)
-// Add env: GOOGLE_API_KEY=your_key in .env.local
 
-// ============================
-// app/api/generateResume/route.ts
-// Gemini server route: turns validated form into STRUCTURED JSON resume
-// ============================
 
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -46,7 +36,7 @@ export async function POST(req: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "");
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     // Ask Gemini to return STRICT JSON that matches our schema
     const schema = {
@@ -110,8 +100,6 @@ export async function POST(req: NextRequest) {
     // try { json = JSON.parse(text); } catch {}
 
     let text = response.text().trim();
-    console.log("RAW:", text);
-
     // Remove markdown code fences if present
     if (text.startsWith("```")) {
       text = text.replace(/^```(json)?/, "").replace(/```$/, "").trim();

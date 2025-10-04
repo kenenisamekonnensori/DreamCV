@@ -89,22 +89,17 @@ export async function signUpAction(preState: State, formData: FormData): Promise
   }
 
   export async function signInAction(preState: State, formData: FormData): Promise<State> {
-    const parsed = FromSchema.safeParse({
-      email: formData.get('email'),
-      password: formData.get('password'),
-    });
+    // const parsed = FromSchema.safeParse({
+    //   email: formData.get('email'),
+    //   password: formData.get('password'),
+    // });
 
-    if(!parsed.success) {
-      const errors = toFieldErrors(parsed.error); 
-      return { ...preState, errors };
-    }
-
+    // if(!parsed.success) {
+    //   const errors = toFieldErrors(parsed.error); 
+    //   return { ...preState, errors };
+    // }
     try{
-      await signIn('credentials', {
-        email: parsed.data.email,
-        password: parsed.data.password,
-        redirectTo: '/'
-      })
+      await signIn('credentials', formData, { callbackUrl: '/' });
     } catch(e) {
       if (e instanceof AuthError) return {...preState, message: "Invalid email or password" };
       return { ...preState, message: "Something went wrong" };
@@ -118,5 +113,5 @@ export async function signUpAction(preState: State, formData: FormData): Promise
 
 export async function loginWithGoogle() {
   "use server";
-  await signIn("google", { redirectTo: "/dashboard" });
+  await signIn("google", { redirectTo: "/" });
 }

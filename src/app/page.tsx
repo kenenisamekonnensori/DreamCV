@@ -1,4 +1,5 @@
 import { Hero } from "@/components/Herro";
+import NavBar from "@/components/shared/NavBar";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Home",
@@ -10,6 +11,7 @@ export default function Home() {
        {/* from-[#f0f4f8] to-white */}
        {/* bg-[#0f172a] */}
       <main>
+        <NavBar />
         <Hero />
       </main>
     </div>
