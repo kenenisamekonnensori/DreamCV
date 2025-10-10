@@ -87,8 +87,6 @@ export async function signUpAction(preState: State, formData: FormData): Promise
       message: 'User created successfully',
     };
   }
-
-  export async function signInAction(preState: State, formData: FormData): Promise<State> {
     // const parsed = FromSchema.safeParse({
     //   email: formData.get('email'),
     //   password: formData.get('password'),
@@ -98,18 +96,42 @@ export async function signUpAction(preState: State, formData: FormData): Promise
     //   const errors = toFieldErrors(parsed.error); 
     //   return { ...preState, errors };
     // }
-    try{
-      await signIn('credentials', formData, { callbackUrl: '/' });
-    } catch(e) {
-      if (e instanceof AuthError) return {...preState, message: "Invalid email or password" };
-      return { ...preState, message: "Something went wrong" };
+export async function signInAction(prevState: State, formData: FormData): Promise<State> {
+  const email = formData.get("email") as string | null;
+  const password = formData.get("password") as string | null;
+
+  // 🧩 Basic validation
+  if (!email || !password) {
+    return { ...prevState, message: "Email and password are required." };
+  }
+
+  try {
+    // 🟢 Attempt sign in
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: "/", // 👈 Redirect after success
+    });
+
+    // If signIn doesn't redirect immediately, show a feedback message
+    return { ...prevState, message: "Redirecting to your dashboard..." };
+
+  } catch (error: any) {
+    // 🧩 Ignore the special Next.js redirect signal
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) throw error;
+
+    // 🧩 Handle common Auth errors
+    if (error instanceof AuthError) {
+      if (error.type === "CredentialsSignin") {
+        return { ...prevState, message: "Invalid email or password." };
+      }
+      return { ...prevState, message: "Authentication failed." };
     }
 
-    return {
-      ...preState,
-      message: "Logged in Successefully"
-    }
-  };
+    console.error("❌ Unexpected sign-in error:", error);
+    return { ...prevState, message: "Something went wrong." };
+  }
+}
 
 export async function loginWithGoogle() {
   "use server";

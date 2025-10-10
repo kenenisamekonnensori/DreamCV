@@ -2,9 +2,8 @@
 
 import { useRef, useEffect, useState } from "react";
 import { Mail, Lock, Loader2 } from "lucide-react";
-import { signUpAction, State } from "@/lib/actions";
-import { signInAction } from "@/lib/actions";
-import { useActionState}  from "react";
+import { useActionState } from "react";
+import { signUpAction, signInAction, State } from "@/lib/actions";
 
 import { Tabs, TabsTrigger, TabsContent, TabsList } from "../ui/tabs";
 import { Label } from "../ui/label";
@@ -14,28 +13,24 @@ import { Button } from "../ui/button";
 export default function LoginForm() {
   const initialState: State = { errors: {}, message: null };
   const [state, formAction, pending] = useActionState(signUpAction, initialState);
-
   const [loginState, loginAction, loginPending] = useActionState(signInAction, initialState);
 
-  // Control tab switching
   const [activeTab, setActiveTab] = useState("login");
-
-  // Signup form ref for reset
   const signupFormRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (state.message) {
-      signupFormRef.current?.reset(); // Clear form
-      setActiveTab("login"); // Switch to login tab
+      signupFormRef.current?.reset();
+      setActiveTab("login");
     }
   }, [state.message]);
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-      {/* Tab Headers */}
+      {/* Tabs Header */}
       <TabsList className="grid w-full grid-cols-2 mb-8">
-        <TabsTrigger value="login" className="cursor-pointer">Login</TabsTrigger>
-        <TabsTrigger value="signup" className="cursor-pointer">Sign Up</TabsTrigger>
+        <TabsTrigger value="login">Login</TabsTrigger>
+        <TabsTrigger value="signup">Sign Up</TabsTrigger>
       </TabsList>
 
       {/* LOGIN FORM */}
@@ -49,9 +44,11 @@ export default function LoginForm() {
               <Input
                 type="email"
                 id="loginEmail"
+                name="email" // 👈 Required for FormData
                 placeholder="Enter your email"
                 className="pl-10"
                 required
+                disabled={loginPending}
               />
             </div>
           </div>
@@ -68,17 +65,45 @@ export default function LoginForm() {
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
               <Input
                 id="loginPassword"
+                name="password" // 👈 Required for FormData
                 type="password"
                 placeholder="••••••••"
                 className="pl-10"
                 required
+                disabled={loginPending}
               />
             </div>
           </div>
 
-          {/* Submit */}
-          <Button type="submit" className="w-full bg-blue-700 cursor-pointer">
-            Sign In
+          {/* Feedback Message */}
+          {loginState.message && (
+            <div
+              className={`text-sm rounded-lg px-4 py-2 ${
+                loginState.message.toLowerCase().includes("redirect")
+                  ? "bg-blue-50 text-blue-700 border border-blue-200"
+                  : loginState.message.toLowerCase().includes("invalid")
+                  ? "bg-red-50 text-red-700 border border-red-200"
+                  : "bg-gray-50 text-gray-700 border border-gray-200"
+              }`}
+            >
+              {loginState.message}
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            className="w-full bg-blue-700 cursor-pointer"
+            disabled={loginPending}
+          >
+            {loginPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              "Sign In"
+            )}
           </Button>
         </form>
       </TabsContent>
@@ -89,66 +114,40 @@ export default function LoginForm() {
           {/* Name */}
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
-            <Input
-              id="name"
-              name="name"
-              placeholder="John Doe"
-              required
-            />
-            {state.errors?.name && (
-              <p className="text-red-600 text-sm">{state.errors.name}</p>
-            )}
+            <Input id="name" name="name" placeholder="John Doe" required />
           </div>
 
           {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="signupEmail">Email</Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
-              <Input
-                id="signupEmail"
-                type="email"
-                placeholder="you@example.com"
-                className="pl-10"
-                required
-                name="email"
-              />
-            </div>
-            {state.errors?.email && (
-              <p className="text-red-600 text-sm">{state.errors.email}</p>
-            )}
+            <Input
+              id="signupEmail"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              required
+            />
           </div>
 
           {/* Password */}
           <div className="space-y-2">
             <Label htmlFor="signupPassword">Password</Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
-              <Input
-                id="signupPassword"
-                type="password"
-                placeholder="••••••••"
-                name="password"
-                className="pl-10"
-                required
-              />
-            </div>
-            {state.errors?.password && (
-              <p className="text-red-600 text-sm">{state.errors.password}</p>
-            )}
-            <p className="text-xs text-gray-500">
-              Password must be at least 8 characters long
-            </p>
+            <Input
+              id="signupPassword"
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              required
+            />
           </div>
 
-          {/* Success Message */}
+          {/* Message */}
           {state.message && (
             <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-2 rounded-lg text-sm">
               {state.message}
             </div>
           )}
 
-          {/* Submit */}
           <Button type="submit" className="w-full bg-blue-700" disabled={pending}>
             {pending ? (
               <>
@@ -159,10 +158,6 @@ export default function LoginForm() {
               "Create Account"
             )}
           </Button>
-
-          <p className="text-xs text-gray-500 text-center">
-            By signing up, you agree to our Terms of Service and Privacy Policy
-          </p>
         </form>
       </TabsContent>
     </Tabs>

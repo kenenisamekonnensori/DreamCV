@@ -6,7 +6,6 @@ import bcrypt from "bcryptjs";
 import z from "zod";
 import { prisma } from "@/lib/prisma";
 
-
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
@@ -31,10 +30,9 @@ const getUserByEmail = async (email: string) => {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "database" },
+  session: { strategy: "jwt" }, // ✅ FIXED
   providers: [
     Google,
-    
     Credentials({
       name: "Credentials",
       credentials: {
@@ -43,14 +41,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         const parsed = LoginSchema.safeParse(credentials);
-        if (!parsed.success) return null;
+        if (!parsed.success) {
+          console.log("❌ Invalid credentials shape", parsed.error);
+          return null;
+        }
 
         const { email, password } = parsed.data;
         const user = await getUserByEmail(email);
+        console.log("🔹 Found user:", user);
         if (!user?.password) return null;
 
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) return null;
+        console.log("🔹 Password match result:", isValid);
+        if (!isValid) {
+          console.log("❌ Invalid password");
+          return null;
+        }
+        console.log("✅ Authorized:", user.email);
+
         return {
           id: user.id,
           name: user.name ?? undefined,
@@ -62,14 +70,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 
   pages: {
-    signIn: "/login"
+    signIn: "/login",
   },
 
   callbacks: {
-    async session({ session, user}) {
-      if (session.user && user) {
-        session.user.id = user.id;
-        session.user.role = user.role as "USER" | "ADMIN";
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.role = token.role as "USER" | "ADMIN";
       }
       return session;
     },
