@@ -3,9 +3,9 @@
 import { email, z, ZodError } from 'zod';
 import { prisma } from './prisma';
 import bcrypt from 'bcryptjs';
-import { signIn } from '@/auth';
+// import { signIn } from '@/auth';
 import { redirect } from 'next/navigation';
-import { AuthError } from 'next-auth';
+// import { AuthError } from 'next-auth';
 import { error } from 'console';
 
 const FromSchema = z.object({
@@ -96,44 +96,3 @@ export async function signUpAction(preState: State, formData: FormData): Promise
     //   const errors = toFieldErrors(parsed.error); 
     //   return { ...preState, errors };
     // }
-export async function signInAction(prevState: State, formData: FormData): Promise<State> {
-  const email = formData.get("email") as string | null;
-  const password = formData.get("password") as string | null;
-
-  // 🧩 Basic validation
-  if (!email || !password) {
-    return { ...prevState, message: "Email and password are required." };
-  }
-
-  try {
-    // 🟢 Attempt sign in
-    await signIn("credentials", {
-      email,
-      password,
-      redirectTo: "/", // 👈 Redirect after success
-    });
-
-    // If signIn doesn't redirect immediately, show a feedback message
-    return { ...prevState, message: "Redirecting to your dashboard..." };
-
-  } catch (error: any) {
-    // 🧩 Ignore the special Next.js redirect signal
-    if (error?.digest?.startsWith("NEXT_REDIRECT")) throw error;
-
-    // 🧩 Handle common Auth errors
-    if (error instanceof AuthError) {
-      if (error.type === "CredentialsSignin") {
-        return { ...prevState, message: "Invalid email or password." };
-      }
-      return { ...prevState, message: "Authentication failed." };
-    }
-
-    console.error("❌ Unexpected sign-in error:", error);
-    return { ...prevState, message: "Something went wrong." };
-  }
-}
-
-export async function loginWithGoogle() {
-  "use server";
-  await signIn("google", { redirectTo: "/" });
-}

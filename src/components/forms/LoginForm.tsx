@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { Mail, Lock, Loader2 } from "lucide-react";
 import { useActionState } from "react";
-import { signUpAction, signInAction, State } from "@/lib/actions";
+import { signUpAction, State } from "@/lib/actions";
 
 import { Tabs, TabsTrigger, TabsContent, TabsList } from "../ui/tabs";
 import { Label } from "../ui/label";
@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 export default function LoginForm() {
   const initialState: State = { errors: {}, message: null };
   const [state, formAction, pending] = useActionState(signUpAction, initialState);
-  const [loginState, loginAction, loginPending] = useActionState(signInAction, initialState);
+  // const [loginState, loginAction, loginPending] = useActionState(signInAction, initialState);
 
   const [activeTab, setActiveTab] = useState("login");
   const signupFormRef = useRef<HTMLFormElement>(null);
@@ -35,7 +35,7 @@ export default function LoginForm() {
 
       {/* LOGIN FORM */}
       <TabsContent value="login">
-        <form action={loginAction} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="loginEmail">Email</Label>
@@ -48,7 +48,7 @@ export default function LoginForm() {
                 placeholder="Enter your email"
                 className="pl-10"
                 required
-                disabled={loginPending}
+                disabled={pending}
               />
             </div>
           </div>
@@ -70,23 +70,23 @@ export default function LoginForm() {
                 placeholder="••••••••"
                 className="pl-10"
                 required
-                disabled={loginPending}
+                disabled={pending}
               />
             </div>
           </div>
 
           {/* Feedback Message */}
-          {loginState.message && (
+          {state.message && (
             <div
               className={`text-sm rounded-lg px-4 py-2 ${
-                loginState.message.toLowerCase().includes("redirect")
+                state.message.toLowerCase().includes("redirect")
                   ? "bg-blue-50 text-blue-700 border border-blue-200"
-                  : loginState.message.toLowerCase().includes("invalid")
+                  : state.message.toLowerCase().includes("invalid")
                   ? "bg-red-50 text-red-700 border border-red-200"
                   : "bg-gray-50 text-gray-700 border border-gray-200"
               }`}
             >
-              {loginState.message}
+              {state.message}
             </div>
           )}
 
@@ -94,9 +94,9 @@ export default function LoginForm() {
           <Button
             type="submit"
             className="w-full bg-blue-700 cursor-pointer"
-            disabled={loginPending}
+            disabled={pending}
           >
-            {loginPending ? (
+            {pending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Signing in...
