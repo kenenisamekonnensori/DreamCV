@@ -7,6 +7,8 @@ import bcrypt from 'bcryptjs';
 import { redirect } from 'next/navigation';
 // import { AuthError } from 'next-auth';
 import { error } from 'console';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 const FromSchema = z.object({
     name: z.string().min(1, 'Name is required'),
@@ -96,3 +98,47 @@ export async function signUpAction(preState: State, formData: FormData): Promise
     //   const errors = toFieldErrors(parsed.error); 
     //   return { ...preState, errors };
     // }
+// ...existing code...
+export type StateLogin = {
+  errors: Record<string, string>;
+  message: string | null;
+};
+
+// export async function authenticate(
+//   preState: State,
+//   formData: FormData
+// ): Promise<State> {
+//   try {
+//     await signIn('credentials', formData);
+//     return { errors: {}, message: null }; // Success, no message
+//   } catch (error) {
+//     if (error instanceof AuthError) {
+//       switch (error.type) {
+//         case 'CredentialsSignin':
+//           return { errors: {}, message: 'Invalid credentials.' };
+//         default:
+//           return { errors: {}, message: 'Something went wrong.' };
+//       }
+//     }
+//     throw error;
+//   }
+// }
+// ...existing code...
+// export async function authenticate(
+//   preState: string | undefined,
+//   formData: FormData
+// ){
+//   try{
+//     await signIn('credentials', formData)
+//   } catch(error){
+//     if (error instanceof AuthError) {
+//       switch (error.type) {
+//         case 'CredentialsSignin':
+//           return 'Invalid credentials.';
+//         default:
+//           return 'Something went wrong.';
+//       }
+//     }
+//     throw error;
+//   }
+// }
