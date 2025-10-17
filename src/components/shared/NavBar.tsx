@@ -2,11 +2,10 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { SignOut } from "../sign-out";
 export default function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const use = false
   const { data: session, status } = useSession();
   useEffect(() => {
     const handleScroll = () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,7 +30,9 @@ import { ResumePreview } from "@/components/ResumePreview";
 import { GeneratedResume } from "@/components/ResumePreview";
 import type { SubmitHandler, Resolver } from "react-hook-form";
 import Link from "next/link";
-
+import { useSession } from "next-auth/react";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 /** --------------------------------------
  * Zod Schemas (Production-grade validation)
  * ---------------------------------------*/
@@ -261,6 +263,20 @@ function ChipInput({
 export default function ResumeFormPage() {
   const [stepIndex, setStepIndex] = useState(0);
   const [saving, setSaving] = useState(false);
+  const {data: session, status} = useSession()
+  const router = useRouter()
+
+  // useEffect(() => {
+  //   if (status === 'unauthenticated'){
+  //     router.push('/login')
+  //   }
+  // }, [status, router])
+
+  // if (status === 'loading'){
+  //   return <p>Loading.......</p>
+  // }
+
+  
 
   const {
     register,

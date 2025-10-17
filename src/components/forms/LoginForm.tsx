@@ -143,7 +143,7 @@ export default function LoginForm() {
           {/* Name */}
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
-            <Input id="name" name="name" placeholder="John Doe" required />
+            <Input id="name" name="name" placeholder="John Doe" required disabled={pending}/>
           </div>
 
           {/* Email */}
@@ -155,6 +155,7 @@ export default function LoginForm() {
               type="email"
               placeholder="you@example.com"
               required
+              disabled={pending}
             />
           </div>
 
@@ -167,6 +168,7 @@ export default function LoginForm() {
               type="password"
               placeholder="••••••••"
               required
+              disabled={pending}
             />
           </div>
 
