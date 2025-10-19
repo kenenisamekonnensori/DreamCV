@@ -1,5 +1,6 @@
 import Link from "next/dist/client/link"
 import { Button } from "./ui/button"
+import { auth } from "@/auth"
 export function Hero() {
     return (
         <section className="relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24 bg-[#042536]">
