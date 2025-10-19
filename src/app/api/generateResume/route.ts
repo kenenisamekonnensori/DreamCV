@@ -35,7 +35,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "");
+    const apiKey = process.env.GOOGLE_API_KEY;
+    if (!apiKey) {
+      console.error("Missing GOOGLE_API_KEY");
+      return NextResponse.json({ success: false, error: "Missing Google API key" }, { status: 500 });
+    }
+    const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     // Ask Gemini to return STRICT JSON that matches our schema
@@ -113,16 +118,51 @@ export async function POST(req: NextRequest) {
     }
 
     let json: any = null;
+    let generated = false;
     try {
       json = JSON.parse(text);
+      generated = true;
     } catch (err) {
-      console.error("JSON parse error:", err, "cleaned text:", text);
+      console.warn("First JSON parse failed, will attempt a second generation. Error:", err);
     }
 
+    // If parsing failed, try a second, stricter generation asking for JSON only
+    if (!json) {
+      try {
+        const retryPrompt = `Return ONLY valid JSON that matches the schema exactly. Do not include any explanations or markdown. Schema: ${JSON.stringify(
+          schema
+        )}\n\nInput: ${JSON.stringify(data)}`;
+
+        const { response: retryResponse } = await model.generateContent({
+          contents: [
+            { role: "system", parts: [{ text: sys }] },
+            { role: "user", parts: [{ text: retryPrompt }] },
+          ],
+        });
+
+        let retryText = retryResponse.text().trim();
+        if (retryText.startsWith("```")) {
+          retryText = retryText.replace(/^```(json)?/, "").replace(/```$/, "").trim();
+        }
+        const firstB = retryText.indexOf("{");
+        const lastB = retryText.lastIndexOf("}");
+        if (firstB !== -1 && lastB !== -1) {
+          retryText = retryText.slice(firstB, lastB + 1);
+        }
+        try {
+          json = JSON.parse(retryText);
+          generated = true;
+        } catch (err2) {
+          console.error("Retry JSON parse failed:", err2, "cleaned:", retryText);
+        }
+      } catch (retryErr) {
+        console.error("Second generation attempt failed:", retryErr);
+      }
+    }
 
     if (!json) {
       // Build a minimal JSON from raw text if parsing failed
-      console.log("faild to generate at json level")
+      console.log("failed to generate at json level; returning fallback built from input")
       json = {
         header: {
           fullName: data.fullName,
@@ -130,19 +170,36 @@ export async function POST(req: NextRequest) {
           location: data.location,
           email: data.email,
           phone: data.phone,
-          links: data.links || []
+          links: data.links || [],
         },
         summary: data.summary,
-        experiences: data.experiences.map(e => ({
-          role: e.role, company: e.company, location: e.location || "", start: e.startDate, end: e.current ? "Present" : (e.endDate || ""), current: !!e.current, bullets: e.highlights || [], tech: e.technologies || []
+        experiences: data.experiences.map((e) => ({
+          role: e.role,
+          company: e.company,
+          location: e.location || "",
+          start: e.startDate,
+          end: e.current ? "Present" : e.endDate || "",
+          current: !!e.current,
+          bullets: e.highlights || [],
+          tech: e.technologies || [],
         })),
-        education: data.education.map(ed => ({ degree: ed.degree, university: ed.university, years: ed.years, details: ed.details || "" })),
+        education: data.education.map((ed) => ({
+          degree: ed.degree,
+          university: ed.university,
+          years: ed.years,
+          details: ed.details || "",
+        })),
         skills: data.skills,
-        projects: (data.projects || []).map(p => ({ name: p.name, description: p.description, link: p.link || "", technologies: p.technologies || [] }))
+        projects: (data.projects || []).map((p) => ({
+          name: p.name,
+          description: p.description,
+          link: p.link || "",
+          technologies: p.technologies || [],
+        })),
       };
     }
 
-    return NextResponse.json({ success: true, resume: json });
+    return NextResponse.json({ success: true, resume: json, generated });
   } catch (e) {
     console.error(e);
     return NextResponse.json({ success: false, error: "Generation failed" }, { status: 500 });
