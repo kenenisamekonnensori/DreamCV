@@ -55,16 +55,16 @@ export default function LoginForm() {
 
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-5">
       {/* Tabs Header */}
-      <TabsList className="grid w-full grid-cols-2 rounded-xl bg-muted/40 p-1">
+      <TabsList className="grid w-full grid-cols-2 rounded-lg border border-slate-200 bg-transparent p-1 dark:border-slate-600">
         <TabsTrigger value="login">Login</TabsTrigger>
         <TabsTrigger value="signup">Sign Up</TabsTrigger>
       </TabsList>
 
       {/* LOGIN FORM */}
       <TabsContent value="login">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="loginEmail">Email</Label>
@@ -75,7 +75,7 @@ export default function LoginForm() {
                 id="loginEmail"
                 name="email" // 👈 Required for FormData
                 placeholder="Enter your email"
-                className="pl-10"
+                className="pl-10 rounded-md border border-gray-300 bg-white text-slate-900 focus-visible:border-blue-500 focus-visible:ring-blue-500/60 dark:border-slate-600 dark:bg-[#25324b] dark:text-slate-100 dark:placeholder:text-slate-400"
                 required
                 disabled={loading}
               />
@@ -97,12 +97,16 @@ export default function LoginForm() {
                 name="password" // 👈 Required for FormData
                 type="password"
                 placeholder="••••••••"
-                className="pl-10"
+                className="pl-10 rounded-md border border-gray-300 bg-white text-slate-900 focus-visible:border-blue-500 focus-visible:ring-blue-500/60 dark:border-slate-600 dark:bg-[#25324b] dark:text-slate-100 dark:placeholder:text-slate-400"
                 required
                 disabled={loading}
               />
             </div>
           </div>
+
+          {error && (
+            <p className="text-sm text-red-500">{error}</p>
+          )}
 
           {/* Feedback Message */}
           {/* {loading.message && (
@@ -120,7 +124,11 @@ export default function LoginForm() {
           )} */}
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button
+            type="submit"
+            className="w-full rounded-md bg-none !bg-blue-600 !from-blue-600 !via-blue-600 !to-blue-600 font-semibold text-white shadow-sm transition-colors duration-200 hover:!bg-blue-700 focus-visible:ring-blue-500/60"
+            disabled={loading}
+          >
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -135,11 +143,18 @@ export default function LoginForm() {
 
       {/* SIGNUP FORM */}
       <TabsContent value="signup">
-        <form ref={signupFormRef} action={formAction} className="space-y-6">
+        <form ref={signupFormRef} action={formAction} className="space-y-4">
           {/* Name */}
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
-            <Input id="name" name="name" placeholder="John Doe" required disabled={pending}/>
+            <Input
+              id="name"
+              name="name"
+              placeholder="John Doe"
+              required
+              disabled={pending}
+              className="rounded-md border border-gray-300 bg-white text-slate-900 focus-visible:border-blue-500 focus-visible:ring-blue-500/60 dark:border-slate-600 dark:bg-[#25324b] dark:text-slate-100 dark:placeholder:text-slate-400"
+            />
           </div>
 
           {/* Email */}
@@ -152,6 +167,7 @@ export default function LoginForm() {
               placeholder="you@example.com"
               required
               disabled={pending}
+              className="rounded-md border border-gray-300 bg-white text-slate-900 focus-visible:border-blue-500 focus-visible:ring-blue-500/60 dark:border-slate-600 dark:bg-[#25324b] dark:text-slate-100 dark:placeholder:text-slate-400"
             />
           </div>
 
@@ -165,6 +181,7 @@ export default function LoginForm() {
               placeholder="••••••••"
               required
               disabled={pending}
+              className="rounded-md border border-gray-300 bg-white text-slate-900 focus-visible:border-blue-500 focus-visible:ring-blue-500/60 dark:border-slate-600 dark:bg-[#25324b] dark:text-slate-100 dark:placeholder:text-slate-400"
             />
           </div>
 
@@ -175,7 +192,11 @@ export default function LoginForm() {
             </div>
           )}
 
-          <Button type="submit" className="w-full" disabled={pending}>
+          <Button
+            type="submit"
+            className="w-full rounded-md bg-none !bg-blue-600 !from-blue-600 !via-blue-600 !to-blue-600 font-semibold text-white shadow-sm transition-colors duration-200 hover:!bg-blue-700 focus-visible:ring-blue-500/60"
+            disabled={pending}
+          >
             {pending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
