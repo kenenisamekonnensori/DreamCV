@@ -14,12 +14,12 @@ export function ReviewStep() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-      <Card className="bg-gradient-to-b from-[#f0f4f8] to-white">
+      <Card className="border border-border/60 shadow-lg">
         <CardHeader>
           <CardTitle>Review Your Information</CardTitle>
         </CardHeader>
-        <CardContent>
-          <ResumePreview data={previewData} />
+        <CardContent className="px-0 sm:px-4">
+          <ResumePreview data={previewData} variant="embedded" />
         </CardContent>
       </Card>
     </motion.div>

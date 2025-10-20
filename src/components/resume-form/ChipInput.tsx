@@ -29,13 +29,13 @@ export function ChipInput({ value, onChange, placeholder, max = 30 }: ChipInputP
         {value.map((v, i) => (
           <span
             key={`${v}-${i}`}
-            className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm"
+            className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-primary/10 px-3 py-1 text-sm text-foreground dark:bg-primary/15"
           >
             {v}
             <button
               type="button"
               onClick={() => remove(i)}
-              className="ml-1 text-muted-foreground hover:text-foreground"
+              className="ml-1 text-muted-foreground transition-colors hover:text-foreground"
               aria-label={`Remove ${v}`}
             >
               ×
@@ -55,7 +55,7 @@ export function ChipInput({ value, onChange, placeholder, max = 30 }: ChipInputP
             }
           }}
         />
-        <Button type="button" onClick={add} size="icon" variant="secondary">
+        <Button type="button" onClick={add} size="icon" variant="outline">
           <Plus className="h-4 w-4" />
         </Button>
       </div>

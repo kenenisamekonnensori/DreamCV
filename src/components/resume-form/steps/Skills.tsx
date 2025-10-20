@@ -15,7 +15,7 @@ export function SkillsStep() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-      <Card className="bg-gradient-to-b from-[#f0f4f8] to-white">
+      <Card className="border border-border/60 shadow-lg">
         <CardHeader>
           <CardTitle>Skills</CardTitle>
         </CardHeader>

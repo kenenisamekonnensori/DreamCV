@@ -23,7 +23,7 @@ export function PersonalDetailsStep() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-      <Card className="bg-gradient-to-b from-[#f0f4f8] to-white">
+      <Card className="border border-border/60 shadow-lg">
         <CardHeader>
           <CardTitle>Personal Information</CardTitle>
         </CardHeader>
@@ -57,12 +57,7 @@ export function PersonalDetailsStep() {
           <div className="sm:col-span-2 space-y-2">
             <div className="flex items-center justify-between">
               <Label>Links</Label>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => append({ label: "Website", url: "" })}
-                size="sm"
-              >
+              <Button type="button" variant="outline" onClick={() => append({ label: "Website", url: "" })} size="sm">
                 <Plus className="mr-2 h-4 w-4" /> Add Link
               </Button>
             </div>

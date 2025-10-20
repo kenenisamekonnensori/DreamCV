@@ -1,146 +1,162 @@
-import Link from "next/dist/client/link"
-import { Button } from "./ui/button"
-import { auth } from "@/auth"
+import Link from "next/link";
+
+import { Button } from "./ui/button";
+
 export function Hero() {
     return (
-        <section className="relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24 bg-[#042536]">
-            {/* bg-gradient-to-br from-[#f0f4f8] to-white */}
-            {/* <div
-                className="absolute inset-0 z-0"
-                style={{
-                    backgroundImage:
-                        "radial-gradient(circle at 25px 25px, rgba(167, 139, 250, 0.1) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(13, 148, 136, 0.1) 2%, transparent 0%)",
-                    backgroundSize: "100px 100px",
-                }}
-            /> */}
-            <div className="max-w-6xl mx-auto my-12">
-                <div className="flex flex-col items-center gap-12 lg:flex-row lg:items-start">
-                    <div className="flex-1 space-y-6 text-center lg:text-left">
-                        <h1 className="text-center lg:text-left text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-                            <span className="bg-gradient-to-br from-[#1E3A8A] via-[#A78BFA] to-[#0D9488] bg-clip-text text-transparent">Build Your Dream</span>
-                            <br className="hidden lg:block"/>
-                            <span className="bg-gradient-to-br from-violet-600 via-teal-400 to-teal-600 bg-clip-text text-transparent">Resume With AI</span>
-                        </h1>
-                        <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0">
-                            Create professional, ATS-optimized resumes that stand out with our 
-                            AI-powered platform. Get personalized templates, expert guidance, 
-                            and land your dream job faster.
-                        </p>
-                        
-                        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
-                        <Button size="lg" className="px-8 py-6 text-lg rounded-xl hover:scale-105 transition-all duration-300 hover:bg-blue-600 cursor-pointer">
-                            <Link href="/resume/generate">Create Your Resume</Link>
-                        </Button>
-                        <Button variant="outline" size="lg" className="px-8 py-6 text-lg rounded-xl hover:scale-105 transition-all duration-300 hover:bg-gray-100 cursor-pointer">
-                            <Link href="/templates">Explore Templates</Link>
-                        </Button>
-                        </div>
+        <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50 pt-10 pb-20 transition-colors duration-300 dark:from-[#0f172a] dark:via-[#0b1120] dark:to-[#1e293b]">
+            <div className="pointer-events-none absolute inset-0">
+                <div className="absolute left-1/2 top-24 h-64 w-64 -translate-x-1/2 rounded-full bg-gradient-to-br from-blue-500/20 via-indigo-500/10 to-transparent blur-3xl dark:from-blue-500/30 dark:via-indigo-500/20" />
+                <div className="absolute -bottom-24 right-16 h-48 w-48 rounded-full bg-gradient-to-br from-indigo-400/15 via-blue-500/10 to-transparent blur-2xl dark:from-indigo-500/25 dark:via-blue-500/15" />
+            </div>
 
-                        <div className="mt-8 flex items-center justify-center lg:justify-start space-x-2 text-sm text-muted-foreground">
-                            <div className="flex -space-x-2">
-                                {[1, 2, 3, 4].map((i) => (
-                                <div
-                                    key={i}
-                                    className="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-b from-[#1E3A8A] to-[#0D9488] flex items-center justify-center text-white text-xs font-semibold"
-                                >
-                                    {/* User initials would go here in a real app */}
-                                </div>
-                                ))}
-                            </div>
-                            <span>
-                                Trusted by <span className="font-semibold">10,000+</span> job
-                                seekers worldwide
+            <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 md:px-6 lg:flex-row lg:items-start">
+                <div className="flex-1 space-y-8 text-center lg:text-left">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-primary shadow-sm dark:border-primary/20 dark:bg-primary/10">
+                        AI-powered resume studio
+                    </span>
+
+                    <h1 className="relative text-3xl font-semibold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+                        <span className="relative inline-block">
+                            <span className="absolute -inset-x-2 -inset-y-1 rounded-3xl bg-gradient-to-r from-blue-500/30 to-indigo-500/30 blur-2xl" />
+                            <span className="relative bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-indigo-300 dark:to-blue-500">
+                                Build your dream resume
                             </span>
-                        </div>
-                        
+                        </span>
+                        <br className="hidden lg:block" />
+                        <span className="text-foreground/80 dark:text-foreground">with thoughtful AI guidance</span>
+                    </h1>
+
+                    <p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground lg:mx-0 lg:text-xl">
+                        DreamCV blends proven resume frameworks with AI assistance to help you craft high-impact, ATS-optimized resumes in minutes.
+                        Tailor every section, surface quantifiable achievements, and stay interview-ready.
+                    </p>
+
+                    <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
+                        <Button
+                            size="lg"
+                            className="group relative w-full overflow-hidden rounded-xl px-8 py-6 text-base font-semibold shadow-md transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto"
+                            asChild
+                        >
+                            <Link href="/resume/generate">
+                                <span className="relative z-10">Create your resume</span>
+                            </Link>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="lg"
+                            className="w-full rounded-xl border-primary/20 px-8 py-6 text-base shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary sm:w-auto"
+                            asChild
+                        >
+                            <Link href="/templates">Explore templates</Link>
+                        </Button>
                     </div>
-                    {/* Resume Preview */}
-                    <div className="flex-1 relative">
-                        <div className="relative">
-                        {/* Main Resume Mockup */}
-                        <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-6 transform rotate-1 transition-all duration-300 hover:rotate-0 hover:scale-105">
-                            <div className="space-y-4">
-                            <div className="flex justify-between items-start">
-                                <div>
-                                <h2 className="text-xl font-bold text-[#1E3A8A]">John Smith</h2>
-                                <p className="text-sm text-gray-600">Senior Product Designer</p>
-                                </div>
-                                <div className="w-16 h-16 bg-[#f0f4f8] rounded-full"></div>
-                            </div>
-                            
-                            <div className="flex gap-4 text-xs text-gray-600">
-                                <div>johnsmith@example.com</div>
-                                <div>(123) 456-7890</div>
-                                <div>New York, NY</div>
-                            </div>
-                            
-                            <div className="h-1 w-full bg-[#A78BFA]/30 rounded-full"></div>
-                            
-                            <div>
-                                <h3 className="text-sm font-semibold mb-1">Experience</h3>
-                                <div className="space-y-2">
-                                <div>
-                                  <div className="flex justify-between text-xs">
-                                    <div className="font-medium">Lead Product Designer, Tech Co</div>
-                                    <div className="text-gray-400">2020 - Present</div>
-                                  </div>
-                                  <div className="text-xs text-gray-600 mt-1">
-                                    <div className="h-1.5 w-full bg-gray-100 rounded-full mb-1"></div>
-                                    <div className="h-1.5 w-3/4 bg-gray-100 rounded-full mb-1"></div>
-                                    <div className="h-1.5 w-1/2 bg-gray-100 rounded-full"></div>
-                                  </div>
-                                </div>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <h3 className="text-sm font-semibold mb-1">Skills</h3>
-                                <div className="flex flex-wrap gap-1">
-                                {["UI/UX", "Figma", "Product Design", "Leadership", "Prototyping"].map((skill) => (
-                                    <span 
-                                    key={skill} 
-                                    className="text-xs bg-[#0D9488]/10 text-[#0D9488] px-2 py-0.5 rounded-full"
-                                    >
-                                    {skill}
-                                    </span>
-                                ))}
-                                </div>
-                            </div>
 
-                            <div className="text-xs text-gray-600">
-                                <div className="h-1.5 w-full bg-gray-100 rounded-full mb-1"></div>
-                                <div className="h-1.5 w-2/3 bg-gray-100 rounded-full mb-1"></div>
-                                <div className="h-1.5 w-5/6 bg-gray-100 rounded-full"></div>
-                            </div>
-                            </div>
-                        </div>
-
-                        {/* AI Suggestions */}
-                        <div className="absolute -right-12 md:right-0 top-1/4 bg-white p-4 rounded-lg shadow-lg border border-[#A78BFA]/30 max-w-[160px] transform -rotate-3">
-                            <div className="text-xs font-medium text-[#A78BFA] mb-1">AI Suggestion</div>
-                            <div className="text-xs text-gray-700">
-                            Add quantifiable achievements to strengthen your experience section
-                            </div>
-                        </div>
-
-                        {/* Template Selector */}
-                        <div className="absolute -left-12 md:left-0 bottom-1/4 bg-white p-3 rounded-lg shadow-lg border border-[#0D9488]/30 transform rotate-3">
-                            <div className="flex space-x-1.5">
-                            {[1, 2, 3].map((i) => (
-                                <div 
-                                key={i} 
-                                className={`w-6 h-8 rounded ${
-                                    i === 1 ? "bg-[#0D9488] ring-2 ring-[#0D9488]/30" : "bg-gray-100"
-                                }`}
-                                ></div>
+                    <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground lg:justify-start">
+                        <div className="flex -space-x-2">
+                            {["AV", "MK", "JT", "LS"].map((initials) => (
+                                <div
+                                    key={initials}
+                                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-gradient-to-b from-blue-500 to-indigo-500 text-xs font-semibold text-white shadow-md dark:border-slate-900"
+                                >
+                                    {initials}
+                                </div>
                             ))}
-                            </div>
-                            <div className="text-xs text-gray-500 mt-1.5 text-center">Templates</div>
                         </div>
+                        <span>
+                            Trusted by <span className="font-semibold text-foreground">10,000+</span> professionals worldwide
+                        </span>
+                    </div>
+                </div>
+
+                <div className="relative flex-1">
+                    <div className="relative mx-auto max-w-md">
+                        <div className="rounded-2xl border border-border/60 bg-card/90 p-6 shadow-xl backdrop-blur-md transition-transform duration-300 hover:-translate-y-1 dark:bg-card/80">
+                            <div className="space-y-6">
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <h2 className="text-xl font-semibold text-foreground">John Smith</h2>
+                                        <p className="text-sm text-muted-foreground">Senior Product Designer</p>
+                                    </div>
+                                    <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500/20 to-indigo-500/30" />
+                                </div>
+
+                                <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
+                                    <span>johnsmith@example.com</span>
+                                    <span>(123) 456-7890</span>
+                                    <span>New York, NY</span>
+                                </div>
+
+                                <div className="h-1 w-full rounded-full bg-gradient-to-r from-blue-500/40 via-indigo-500/40 to-purple-400/40" />
+
+                                <div className="space-y-4">
+                                    <div>
+                                        <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Experience</h3>
+                                        <div className="mt-2 space-y-3 text-xs text-muted-foreground">
+                                            <div className="rounded-lg border border-border/60 bg-background/40 p-3">
+                                                <div className="flex items-center justify-between text-foreground">
+                                                    <span className="font-medium">Lead Product Designer, Tech Co</span>
+                                                    <span className="text-muted-foreground">2020 – Present</span>
+                                                </div>
+                                                <ul className="mt-2 space-y-1 text-muted-foreground">
+                                                    <li>• Designed end-to-end experiences for 5+ product lines.</li>
+                                                    <li>• Mentored a cross-functional team of 8 designers.</li>
+                                                    <li>• Improved activation by 24% with rapid prototyping.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Skills</h3>
+                                        <div className="mt-3 flex flex-wrap gap-2">
+                                            {["UI/UX", "Figma", "Product Strategy", "Leadership", "Prototyping"].map((skill) => (
+                                                <span
+                                                    key={skill}
+                                                    className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary dark:border-primary/30 dark:bg-primary/15"
+                                                >
+                                                    {skill}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="text-xs text-muted-foreground">
+                                    <div className="h-1.5 w-full rounded-full bg-muted/70" />
+                                    <div className="mt-1 h-1.5 w-4/5 rounded-full bg-muted/50" />
+                                    <div className="mt-1 h-1.5 w-3/5 rounded-full bg-muted/40" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="absolute -right-10 top-1/4 w-40 -rotate-3 rounded-xl border border-indigo-200/60 bg-card/90 p-4 shadow-lg transition-transform duration-300 hover:translate-y-1 dark:border-indigo-500/30 dark:bg-card">
+                            <p className="text-xs font-medium text-indigo-500 dark:text-indigo-300">AI Suggestion</p>
+                            <p className="mt-2 text-xs text-muted-foreground">
+                                Highlight measurable outcomes to boost your impact statement.
+                            </p>
+                        </div>
+
+                        <div className="absolute -left-10 bottom-1/4 w-36 rotate-3 rounded-xl border border-blue-200/60 bg-card/90 p-3 shadow-lg transition-transform duration-300 hover:-translate-y-1 dark:border-blue-500/40 dark:bg-card">
+                            <div className="flex items-center justify-center gap-2">
+                                {[1, 2, 3].map((i) => (
+                                    <div
+                                        key={i}
+                                        className={`h-10 w-7 rounded-lg ${
+                                            i === 1
+                                                ? "bg-gradient-to-b from-blue-500 to-indigo-500 shadow ring-2 ring-blue-500/40"
+                                                : "bg-muted"
+                                        }`}
+                                    />
+                                ))}
+                            </div>
+                            <p className="mt-2 text-center text-[10px] font-medium text-muted-foreground">
+                                Template styles
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-    )
+    );
 }

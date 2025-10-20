@@ -164,7 +164,7 @@ export default function ResumeFormPage() {
 
   return (
     <FormProvider {...methods}>
-      <div className="mx-auto max-w-6xl p-4 sm:p-8">
+      <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-8">
         <FormHeader onSaveDraft={handleSaveDraft} onReset={handleReset} />
         <StepIndicator currentIndex={stepIndex} />
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">

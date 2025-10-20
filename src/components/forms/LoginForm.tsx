@@ -55,9 +55,9 @@ export default function LoginForm() {
 
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
       {/* Tabs Header */}
-      <TabsList className="grid w-full grid-cols-2 mb-8">
+      <TabsList className="grid w-full grid-cols-2 rounded-xl bg-muted/40 p-1">
         <TabsTrigger value="login">Login</TabsTrigger>
         <TabsTrigger value="signup">Sign Up</TabsTrigger>
       </TabsList>
@@ -69,7 +69,7 @@ export default function LoginForm() {
           <div className="space-y-2">
             <Label htmlFor="loginEmail">Email</Label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="email"
                 id="loginEmail"
@@ -86,12 +86,12 @@ export default function LoginForm() {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <Label htmlFor="loginPassword">Password</Label>
-              <a href="/reset-password" className="text-sm text-dreamcv-blue hover:underline">
+              <a href="/reset-password" className="text-sm text-primary hover:underline">
                 Forgot password?
               </a>
             </div>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 id="loginPassword"
                 name="password" // 👈 Required for FormData
@@ -120,11 +120,7 @@ export default function LoginForm() {
           )} */}
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            className="w-full bg-blue-700 cursor-pointer"
-            disabled={loading}
-          >
+          <Button type="submit" className="w-full" disabled={loading}>
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -179,7 +175,7 @@ export default function LoginForm() {
             </div>
           )}
 
-          <Button type="submit" className="w-full bg-blue-700" disabled={pending}>
+          <Button type="submit" className="w-full" disabled={pending}>
             {pending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

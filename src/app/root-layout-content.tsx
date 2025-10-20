@@ -4,6 +4,7 @@
 import { usePathname } from "next/navigation"; // Import usePathname
 import NavBar from "@/components/shared/NavBar"; // Your Navbar
 import { Providers } from "./providers"; // Your SessionProvider wrapper
+import { cn } from "@/lib/utils";
 
 const publicRoutes = ["/login", "/signup", "/resume/generate"]; // Paths where NavBar should NOT show up
 // Add any other routes where you explicitly don't want the Navbar.
@@ -20,7 +21,12 @@ export function RootLayoutContent({
   return (
     <Providers>
       {!hideNavbar && <NavBar />} {/* Conditionally render NavBar */}
-      <main className="min-h-screen">
+      <main
+        className={cn(
+          "min-h-screen bg-background pb-16 transition-colors duration-300",
+          hideNavbar ? "pt-12" : "pt-24"
+        )}
+      >
         {children}
       </main>
     </Providers>

@@ -19,7 +19,7 @@ export function FormNavigation({
   isSubmitting,
 }: FormNavigationProps) {
   return (
-    <div className="mt-8 flex justify-between">
+    <div className="mt-8 flex flex-col gap-3 rounded-2xl border border-border/60 bg-card/80 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
       <Button type="button" variant="outline" onClick={onBack} disabled={isFirstStep}>
         <ChevronLeft className="mr-2 h-4 w-4" />
         Back
@@ -40,7 +40,7 @@ export function FormNavigation({
           ) : (
             <>
               <FileText className="mr-2 h-4 w-4" />
-              Generate Resume
+              Generate resume
             </>
           )}
         </Button>

@@ -4,13 +4,14 @@
 // ============================
 
 "use client";
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Download, Loader2, Printer } from "lucide-react";
 import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { cn } from "@/lib/utils";
 
 export type GeneratedResume = {
   header: { fullName: string; headline: string; location: string; email: string; phone: string; links: { label: string; url: string }[] };
@@ -97,32 +98,58 @@ function ResumePDF({ data }: { data: GeneratedResume }) {
 }
 
 // ---------------- Visual Preview (on-screen) ----------------
-export function ResumePreview({ data, onBack }: { data: GeneratedResume; onBack?: () => void }) {
+type ResumePreviewVariant = "standalone" | "embedded";
+
+interface ResumePreviewProps {
+  data: GeneratedResume;
+  onBack?: () => void;
+  variant?: ResumePreviewVariant;
+  className?: string;
+}
+
+export function ResumePreview({ data, onBack, variant = "standalone", className }: ResumePreviewProps) {
   const fileName = `${data.header.fullName.replace(/\s+/g, "_")}_Resume.pdf`;
 
+  const showToolbar = variant === "standalone" || typeof onBack === "function";
+  const showFooter = variant === "standalone";
+
   return (
-    <div className="mx-auto max-w-4xl p-4 sm:p-8 mt-32">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Preview</h2>
-        <div className="flex gap-2">
-          {onBack && (
-            <Button variant="outline" onClick={onBack}>Back</Button>
-          )}
-          <PDFDownloadLink
-            document={<ResumePDF data={data} />}
-            fileName={fileName}
-          >
-            {({ loading }) => (
-              <Button disabled={loading}>
-                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
-                Download PDF
+    <div
+      className={cn(
+        "mx-auto w-full max-w-4xl space-y-4 rounded-3xl bg-transparent p-4 sm:p-8",
+        variant === "standalone" ? "mt-32" : "mt-0 sm:p-6",
+        className
+      )}
+    >
+      {showToolbar && (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-xl font-semibold">Preview</h2>
+          <div className="flex flex-wrap items-center gap-2">
+            {onBack && (
+              <Button variant="outline" onClick={onBack}>
+                Back
               </Button>
             )}
-          </PDFDownloadLink>
+            <PDFDownloadLink document={<ResumePDF data={data} />} fileName={fileName}>
+              {({ loading }) => (
+                <Button disabled={loading}>
+                  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                  Download PDF
+                </Button>
+              )}
+            </PDFDownloadLink>
+          </div>
         </div>
-      </div>
+      )}
 
-      <Card className="print:shadow-none">
+      <Card
+        className={cn(
+          "print:shadow-none",
+          variant === "embedded"
+            ? "border border-border/60 shadow-sm"
+            : "shadow-xl"
+        )}
+      >
         <CardHeader className="pb-2">
           <CardTitle className="text-2xl">{data.header.fullName}</CardTitle>
           <p className="text-sm text-muted-foreground">{data.header.headline}</p>
@@ -199,11 +226,13 @@ export function ResumePreview({ data, onBack }: { data: GeneratedResume; onBack?
         </CardContent>
       </Card>
 
-      <div className="mt-4 flex justify-end">
-        <Button variant="ghost" className="print:hidden" onClick={() => window.print()}>
-          <Printer className="mr-2 h-4 w-4" /> Print
-        </Button>
-      </div>
+      {showFooter && (
+        <div className="flex justify-end">
+          <Button variant="ghost" className="print:hidden" onClick={() => window.print()}>
+            <Printer className="mr-2 h-4 w-4" /> Print
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

@@ -25,12 +25,12 @@ export function ExperienceStep() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-      <Card className="bg-gradient-to-b from-[#f0f4f8] to-white">
+      <Card className="border border-border/60 shadow-lg">
         <CardHeader className="flex-row items-center justify-between">
           <CardTitle>Work Experience</CardTitle>
           <Button
             type="button"
-            variant="secondary"
+            variant="outline"
             onClick={() =>
               append({
                 role: "",
@@ -49,7 +49,10 @@ export function ExperienceStep() {
         </CardHeader>
         <CardContent className="space-y-6">
           {fields.map((field, index) => (
-            <div key={field.id} className="space-y-4 rounded-lg border p-4">
+            <div
+              key={field.id}
+              className="space-y-4 rounded-2xl border border-border/60 bg-background/60 p-4 shadow-sm dark:bg-background/40"
+            >
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold">Experience #{index + 1}</h3>
                 <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>

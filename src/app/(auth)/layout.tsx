@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
 	return (
-		<div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#071030] via-[#071030]/85 to-[#071030]">
+		<div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#e3e5eb] via-[#071030]/85 to-[#d4d7e0]">
 			{/* Dark gradient backdrop */}
 			<div className="absolute inset-0 -z-10" aria-hidden="true">
 				<div className="absolute inset-0 bg-gradient-to-br from-[#071030] via-[#0b1830] to-[#071030] opacity-95"></div>
