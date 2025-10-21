@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { motion } from "framer-motion";
+import * as motion from "motion/react-client"
 import { ResumeFormValues } from "@/lib/resume-form-types";
 
 export function ExtrasStep() {

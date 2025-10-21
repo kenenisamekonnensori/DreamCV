@@ -2,7 +2,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { motion } from "framer-motion";
+import * as motion from "motion/react-client"
 import { ResumeFormSchema, ResumeFormValues } from "@/lib/resume-form-types";
 import { ResumePreview } from "@/components/ResumePreview";
 import { transformFormDataForPreview } from "@/lib/resume-data-transformer";

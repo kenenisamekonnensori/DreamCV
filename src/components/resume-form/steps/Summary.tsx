@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { motion } from "framer-motion";
+import * as motion from "motion/react-client"
 import { ResumeFormValues } from "@/lib/resume-form-types";
 
 export function SummaryStep() {
