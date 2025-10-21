@@ -1,38 +1,38 @@
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { LogIn, FilePlus, Edit, Eye, Download } from "lucide-react";
-import * as motion from "motion/react-client"
+import { Download, Edit, Eye, FilePlus, LogIn } from "lucide-react";
+import * as motion from "motion/react-client";
 import React from "react";
 
 const steps = [
   {
     title: "Login to DreamCV",
-    description: "Create your account or log in to start building your resume.",
+    description: "Create your account or sign in to unlock the resume builder.",
     icon: LogIn,
   },
   {
     title: "Create a Resume",
-    description: "Click 'Create Resume' to open the resume form.",
+    description: "Select “Create Resume” to launch your tailored DreamCV workspace.",
     icon: FilePlus,
   },
   {
     title: "Fill in Your Details",
-    description: "Enter personal info, education, skills, and projects.",
+    description: "Add your experience, education, skills, and personal story with guided prompts.",
     icon: Edit,
   },
   {
     title: "Extras",
-    description: "Add Target role and theme like template color and font style.",
+    description: "Add Target role, theme and template you liked to use.",
     icon: Edit,
   },
   {
     title: "Preview & Adjust",
-    description: "Instantly preview your resume with your inputs before generating.",
+    description: "Instantly review your resume, fine-tune sections, and polish every highlight.",
     icon: Eye,
   },
   {
     title: "Generate & Download",
-    description: "Hit 'Generate Resume' to let AI craft your version, then download it instantly.",
+    description: "Let DreamCV craft the final version and download your polished resume instantly.",
     icon: Download,
   },
 ];
@@ -52,43 +52,58 @@ export default function HowItWorksSection() {
             Your AI-powered resume builder, from login to download.
           </p>
         </header>
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {steps.map((step, idx) => {
-            const Icon = step.icon;
-            return (
-              <motion.div
-                key={step.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-              >
-                <Card
-                  className="rounded-xl p-6 shadow-sm bg-white dark:bg-slate-800 hover:shadow-md transition-transform duration-300 hover:scale-105 flex flex-col items-center"
+        <div className="relative">
+          <motion.div
+            className="hidden lg:block absolute top-12 left-8 right-8 h-[2px] rounded-full bg-blue-500 dark:bg-blue-400 origin-left"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
+          <motion.div
+            className="absolute left-6 top-12 bottom-12 w-[2px] rounded-full bg-blue-500 dark:bg-blue-400 origin-top md:hidden"
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
+          <div className="relative z-10 grid grid-cols-1 gap-8 pl-12 md:grid-cols-2 md:pl-0 lg:grid-cols-3">
+            {steps.map((step, idx) => {
+              const Icon = step.icon;
+              return (
+                <motion.div
+                  key={step.title}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  // whileHover={{ scale: 1.04, y: -4 }}
+                  transition={{ delay: idx * 0.08 }}
+                  className="relative h-full"
                 >
-                  <CardHeader className="flex flex-col items-center gap-3">
-                    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-600 dark:bg-blue-400 mb-2">
-                      <span className="text-white dark:text-slate-900 text-lg font-bold">
-                        {idx + 1}
-                      </span>
-                    </div>
-                    <Icon className="w-7 h-7 text-blue-600 dark:text-blue-400" />
-                    <Separator className="my-6 w-12" />
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 text-center">
-                      {step.title}
-                    </h3>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700 dark:text-gray-300 text-center text-base">
-                      {step.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
+                  <Card className="transition-all duration-300 ease-out hover:scale-[1.04] hover:-translate-y-[2px] hover:shadow-lg
+ dark:bg-slate-800">
+                    <CardHeader className="flex flex-col items-start gap-3 p-0 text-left lg:items-center lg:text-center">
+                      <div className="flex items-center gap-4 lg:flex-col lg:gap-3">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white dark:bg-blue-400 dark:text-slate-900">
+                          <span className="text-lg font-semibold">{idx + 1}</span>
+                        </div>
+                        <Icon className="h-7 w-7 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <Separator className="my-2 w-12 lg:mx-auto" />
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                        {step.title}
+                      </h3>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <p className="text-base text-gray-700 transition-colors duration-300 dark:text-gray-300 lg:text-center">
+                        {step.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

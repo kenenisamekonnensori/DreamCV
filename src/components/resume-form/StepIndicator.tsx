@@ -28,11 +28,11 @@ function StepBadge({ index, active, completed }: { index: number; active: boolea
 export function StepIndicator({ currentIndex }: StepIndicatorProps) {
     const progress = ((currentIndex + 1) / steps.length) * 100;
   return (
-    <Card className="mb-4 border border-border/60 bg-card/95 shadow-lg">
+    <Card className="mb-4 border border-border/60 bg-card/95 shadow-lg overflow-scroll">
       <CardContent className="py-4">
-        <div className="mb-3 flex items-center gap-3">
+        <div className="mb-3 flex items-center gap-2">
           {steps.map((s, i) => (
-            <div key={s.key} className="flex items-center gap-3">
+            <div key={s.key} className="flex items-center gap-2">
               <StepBadge index={i} active={i === currentIndex} completed={i < currentIndex} />
               <span
                 className={`hidden text-sm font-medium sm:inline ${
