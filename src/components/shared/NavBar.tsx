@@ -9,7 +9,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { SignOut } from "../sign-out";
 
 const navigation = [
-  { href: "#feature", label: "Features" },
+  { href: "#features", label: "Features" },
   { href: "#template", label: "Templates" },
   { href: "#pricing", label: "Pricing" },
   { href: "#faq", label: "FAQ" },

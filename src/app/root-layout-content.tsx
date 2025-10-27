@@ -3,6 +3,7 @@
 
 import { usePathname } from "next/navigation"; // Import usePathname
 import NavBar from "@/components/shared/NavBar"; // Your Navbar
+import Footer from "@/components/shared/Footer";
 import { Providers } from "./providers"; // Your SessionProvider wrapper
 import { cn } from "@/lib/utils";
 
@@ -29,6 +30,7 @@ export function RootLayoutContent({
       >
         {children}
       </main>
+      <Footer />
     </Providers>
   );
 }

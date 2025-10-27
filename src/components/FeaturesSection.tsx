@@ -40,7 +40,7 @@ export default function FeaturesSection() {
   return (
     <section
       className="w-full py-20 bg-gray-50 dark:bg-slate-900 transition-colors duration-500"
-      aria-label="DreamCV features"
+      aria-label="DreamCV features" id="features"
     >
       <div className="max-w-6xl mx-auto px-4">
         <header className="mb-12 text-center">
