@@ -1,6 +1,6 @@
 // src/lib/resume-data-transformer.ts
 import type { ResumeFormOutput } from "./resume-form-types";
-import type { GeneratedResume } from "@/components/ResumePreview";
+import type { GeneratedResume } from "@/components/previews/ResumePreview";
 
 /**
  * Transforms the flat data from the resume form into the nested structure

@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import * as motion from "motion/react-client"
 import { ResumeFormSchema, ResumeFormValues } from "@/lib/resume-form-types";
-import { ResumePreview } from "@/components/ResumePreview";
+import { ResumePreview } from "@/components/previews/ResumePreview";
 import { transformFormDataForPreview } from "@/lib/resume-data-transformer";
 
 export function ReviewStep() {

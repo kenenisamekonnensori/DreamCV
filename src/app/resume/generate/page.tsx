@@ -23,7 +23,8 @@ import { SkillsStep } from "@/components/resume-form/steps/Skills";
 import { ProjectsStep } from "@/components/resume-form/steps/Projects";
 import { ExtrasStep } from "@/components/resume-form/steps/Extras";
 import { ReviewStep } from "@/components/resume-form/steps/Review";
-import { ResumePreview, GeneratedResume } from "@/components/ResumePreview";
+import { ResumePreview } from "@/components/previews/ResumePreview";
+import { GeneratedResume } from "@/types/GeneratedTypes";
 import { transformFormDataForPreview } from "@/lib/resume-data-transformer";
 
 const DRAFT_KEY = "resume.form.draft.v2";
