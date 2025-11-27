@@ -2,7 +2,8 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { GeneratedResume } from "./previews/ResumePreview"; // Adjust path as needed
+import { GeneratedResume } from "@/types/GeneratedTypes";
+ // Adjust path as needed
 // Ensure Card, CardHeader, CardContent, CardTitle, Badge, Separator are also imported or available
 // For PDF generation, we might want to simplify these UI components to pure HTML+Tailwind
 // to avoid issues with server-side rendering of complex components or dynamic styles.

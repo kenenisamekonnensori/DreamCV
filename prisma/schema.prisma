@@ -1,17 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
-}
+  provider = "prisma-client"  // CHANGED: Was "prisma-client-js"
+  output   = "../src/generated/client" // CHANGED: Moves client out of node_modules
+  engineType = "client"
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -50,12 +42,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?  @db.Text
-  access_token      String?  @db.Text
+  refresh_token     String?  
+  access_token      String?  
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?  @db.Text
+  id_token          String?  
   session_state     String?
 
   user User @relation(fields: [userId], references: [id])

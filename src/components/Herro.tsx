@@ -4,10 +4,10 @@ import { Button } from "./ui/button";
 
 export function Hero() {
     return (
-        <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50 pt-10 pb-20 transition-colors duration-300 dark:from-[#0f172a] dark:via-[#0b1120] dark:to-[#1e293b]">
+        <section className="relative overflow-hidden bg-linear-to-br from-slate-50 via-white to-blue-50 pt-10 pb-20 transition-colors duration-300 dark:from-[#0f172a] dark:via-[#0b1120] dark:to-[#1e293b]">
             <div className="pointer-events-none absolute inset-0">
-                <div className="absolute left-1/2 top-24 h-64 w-64 -translate-x-1/2 rounded-full bg-gradient-to-br from-blue-500/20 via-indigo-500/10 to-transparent blur-3xl dark:from-blue-500/30 dark:via-indigo-500/20" />
-                <div className="absolute -bottom-24 right-16 h-48 w-48 rounded-full bg-gradient-to-br from-indigo-400/15 via-blue-500/10 to-transparent blur-2xl dark:from-indigo-500/25 dark:via-blue-500/15" />
+                <div className="absolute left-1/2 top-24 h-64 w-64 -translate-x-1/2 rounded-full bg-linear-to-br from-blue-500/20 via-indigo-500/10 to-transparent blur-3xl dark:from-blue-500/30 dark:via-indigo-500/20" />
+                <div className="absolute -bottom-24 right-16 h-48 w-48 rounded-full bg-linear-to-br from-indigo-400/15 via-blue-500/10 to-transparent blur-2xl dark:from-indigo-500/25 dark:via-blue-500/15" />
             </div>
 
             <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-12 px-4 md:px-6 lg:flex-row lg:items-start">
@@ -18,8 +18,8 @@ export function Hero() {
 
                     <h1 className="relative text-3xl font-semibold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
                         <span className="relative inline-block">
-                            <span className="absolute -inset-x-2 -inset-y-1 rounded-3xl bg-gradient-to-r from-blue-500/30 to-indigo-500/30 blur-2xl" />
-                            <span className="relative bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-indigo-300 dark:to-blue-500">
+                            <span className="absolute -inset-x-2 -inset-y-1 rounded-3xl bg-linear-to-r from-blue-500/30 to-indigo-500/30 blur-2xl" />
+                            <span className="relative bg-linear-to-r from-blue-600 via-indigo-500 to-blue-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-indigo-300 dark:to-blue-500">
                                 Build your dream resume
                             </span>
                         </span>
@@ -57,7 +57,7 @@ export function Hero() {
                             {["AV", "MK", "JT", "LS"].map((initials) => (
                                 <div
                                     key={initials}
-                                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-gradient-to-b from-blue-500 to-indigo-500 text-xs font-semibold text-white shadow-md dark:border-slate-900"
+                                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-linear-to-b from-blue-500 to-indigo-500 text-xs font-semibold text-white shadow-md dark:border-slate-900"
                                 >
                                     {initials}
                                 </div>
@@ -78,7 +78,7 @@ export function Hero() {
                                         <h2 className="text-xl font-semibold text-foreground">John Smith</h2>
                                         <p className="text-sm text-muted-foreground">Senior Product Designer</p>
                                     </div>
-                                    <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500/20 to-indigo-500/30" />
+                                    <div className="h-16 w-16 rounded-full bg-linear-to-br from-blue-500/20 to-indigo-500/30" />
                                 </div>
 
                                 <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
@@ -87,7 +87,7 @@ export function Hero() {
                                     <span>New York, NY</span>
                                 </div>
 
-                                <div className="h-1 w-full rounded-full bg-gradient-to-r from-blue-500/40 via-indigo-500/40 to-purple-400/40" />
+                                <div className="h-1 w-full rounded-full bg-linear-to-r from-blue-500/40 via-indigo-500/40 to-purple-400/40" />
 
                                 <div className="space-y-4">
                                     <div>
@@ -144,7 +144,7 @@ export function Hero() {
                                         key={i}
                                         className={`h-10 w-7 rounded-lg ${
                                             i === 1
-                                                ? "bg-gradient-to-b from-blue-500 to-indigo-500 shadow ring-2 ring-blue-500/40"
+                                                ? "bg-linear-to-b from-blue-500 to-indigo-500 shadow ring-2 ring-blue-500/40"
                                                 : "bg-muted"
                                         }`}
                                     />

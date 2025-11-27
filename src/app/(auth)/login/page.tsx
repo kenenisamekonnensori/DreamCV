@@ -29,9 +29,9 @@ export default async function LoginPage() {
                 <div className="space-y-4">
                     <GithubSignIn />
                     <div className="flex items-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
+                        <div className="h-px flex-1 bg-linear-to-r from-transparent via-border to-transparent" />
                         <span className="px-2">Or</span>
-                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
+                        <div className="h-px flex-1 bg-linear-to-r from-transparent via-border to-transparent" />
                     </div>
                     <LoginForm />
                 </div>

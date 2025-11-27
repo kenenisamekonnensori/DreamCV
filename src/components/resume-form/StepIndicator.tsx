@@ -18,7 +18,7 @@ function StepBadge({ index, active, completed }: { index: number; active: boolea
         active
           ? "ring-2 ring-primary/40 ring-offset-2 ring-offset-background"
           : ""
-      } ${completed ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground" : ""}`}
+      } ${completed ? "bg-linear-to-r from-primary to-secondary text-primary-foreground" : ""}`}
     >
       {index + 1}
     </Badge>

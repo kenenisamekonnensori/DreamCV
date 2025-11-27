@@ -71,7 +71,7 @@ export default function TestimonialsSection() {
           {testimonials.map((testimonial) => (
             <Card
               key={testimonial.name}
-              className="min-w-[300px] mx-4 rounded-xl bg-white p-6 shadow-sm transition-all duration-200 ease-out hover:-translate-y-[2px] hover:scale-[1.03] hover:shadow-lg dark:bg-slate-800"
+              className="min-w-[300px] mx-4 rounded-xl bg-white p-6 shadow-sm transition-all duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-lg dark:bg-slate-800"
             >
               <CardHeader className="flex flex-row items-center gap-4 p-0 pb-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-base font-semibold text-white dark:bg-blue-400 dark:text-slate-900">

@@ -6,7 +6,7 @@ import { Github } from "../ui/github";
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="w-full bg-gradient-to-b from-gray-900 to-black text-gray-300">
+    <footer className="w-full bg-linear-to-b from-gray-900 to-black text-gray-300">
       <div className="max-w-7xl mx-auto px-6 py-14">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Logo / Tagline */}

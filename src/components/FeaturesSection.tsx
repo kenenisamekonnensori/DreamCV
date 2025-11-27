@@ -62,7 +62,7 @@ export default function FeaturesSection() {
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
               >
-                <Card className="h-full rounded-xl bg-white shadow-sm transition-all duration-200 ease-out hover:-translate-y-[2px] hover:scale-[1.03] hover:shadow-lg dark:bg-slate-800">
+                <Card className="h-full rounded-xl bg-white shadow-sm transition-all duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-lg dark:bg-slate-800">
                   <CardHeader className="flex flex-col gap-4 p-6 pb-0">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white dark:bg-blue-400 dark:text-slate-900">
                       <Icon className="h-6 w-6" />

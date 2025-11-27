@@ -54,14 +54,14 @@ export default function HowItWorksSection() {
         </header>
         <div className="relative">
           <motion.div
-            className="hidden lg:block absolute top-12 left-8 right-8 h-[2px] rounded-full bg-blue-500 dark:bg-blue-400 origin-left"
+            className="hidden lg:block absolute top-12 left-8 right-8 h-0.5 rounded-full bg-blue-500 dark:bg-blue-400 origin-left"
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           />
           <motion.div
-            className="absolute left-6 top-12 bottom-12 w-[2px] rounded-full bg-blue-500 dark:bg-blue-400 origin-top md:hidden"
+            className="absolute left-6 top-12 bottom-12 w-0.5 rounded-full bg-blue-500 dark:bg-blue-400 origin-top md:hidden"
             initial={{ scaleY: 0 }}
             whileInView={{ scaleY: 1 }}
             viewport={{ once: true, amount: 0.4 }}
@@ -80,7 +80,7 @@ export default function HowItWorksSection() {
                   transition={{ delay: idx * 0.08 }}
                   className="relative h-full"
                 >
-                  <Card className="transition-all duration-300 ease-out hover:scale-[1.04] hover:-translate-y-[2px] hover:shadow-lg
+                  <Card className="transition-all duration-300 ease-out hover:scale-[1.04] hover:-translate-y-0.5 hover:shadow-lg
  dark:bg-slate-800">
                     <CardHeader className="flex flex-col items-start gap-3 p-0 text-left lg:items-center lg:text-center">
                       <div className="flex items-center gap-4 lg:flex-col lg:gap-3">

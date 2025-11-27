@@ -42,8 +42,8 @@ export default function NavBar() {
           className="flex items-center gap-2 text-2xl font-semibold tracking-tight text-foreground transition-transform hover:-translate-y-0.5"
         >
           <span className="relative inline-flex items-center">
-            <span className="absolute -inset-x-2 -inset-y-1 rounded-full bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-transparent blur-xl" />
-            <span className="relative bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600 bg-clip-text text-transparent">
+            <span className="absolute -inset-x-2 -inset-y-1 rounded-full bg-linear-to-r from-blue-500/20 via-indigo-500/20 to-transparent blur-xl" />
+            <span className="relative bg-linear-to-r from-blue-500 via-indigo-500 to-blue-600 bg-clip-text text-transparent">
               DreamCV
             </span>
           </span>

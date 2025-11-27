@@ -126,7 +126,7 @@ export default function LoginForm() {
           {/* Submit Button */}
           <Button
             type="submit"
-            className="w-full rounded-md bg-none !bg-blue-600 !from-blue-600 !via-blue-600 !to-blue-600 font-semibold text-white shadow-sm transition-colors duration-200 hover:!bg-blue-700 focus-visible:ring-blue-500/60"
+            className="w-full rounded-md bg-none bg-blue-600! from-blue-600! via-blue-600! to-blue-600! font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-blue-700! focus-visible:ring-blue-500/60"
             disabled={loading}
           >
             {loading ? (
@@ -194,7 +194,7 @@ export default function LoginForm() {
 
           <Button
             type="submit"
-            className="w-full rounded-md bg-none !bg-blue-600 !from-blue-600 !via-blue-600 !to-blue-600 font-semibold text-white shadow-sm transition-colors duration-200 hover:!bg-blue-700 focus-visible:ring-blue-500/60"
+            className="w-full rounded-md bg-none bg-blue-600! from-blue-600! via-blue-600! to-blue-600! font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-blue-700! focus-visible:ring-blue-500/60"
             disabled={pending}
           >
             {pending ? (
