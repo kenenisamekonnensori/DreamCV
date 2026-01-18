@@ -49,8 +49,6 @@ export async function signUpAction(preState: State, formData: FormData): Promise
         password: formData.get('password'),
         // confirmPassword: formData.get('confirmPassword'),
     }
-    
-    const errors: State['errors'] = {}
     const result = FromSchema.safeParse(data);
 
     if (!result.success) {
@@ -73,7 +71,7 @@ export async function signUpAction(preState: State, formData: FormData): Promise
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         name,
         email,

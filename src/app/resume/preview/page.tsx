@@ -4,14 +4,17 @@ import { templates } from "@/lib/templates";
 import { ResumeData } from "../../../types/resume";
 import React from "react";
 
+type PreviewSearchParams = Record<string, string | undefined>;
+
 export default async function ResumePreview({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<PreviewSearchParams>;
 }) {
+  const resolvedParams = await searchParams;
   // Step 1: Read params
-  const template = searchParams.template || "modern";
-  const dataParam = searchParams.data;
+  const template = resolvedParams.template || "modern";
+  const dataParam = resolvedParams.data;
 
   if (!dataParam) {
     return (
@@ -27,7 +30,7 @@ export default async function ResumePreview({
   let resumeData: ResumeData;
   try {
     resumeData = JSON.parse(decodeURIComponent(dataParam));
-  } catch (_err) {
+  } catch {
     return (
       <div className="flex h-screen items-center justify-center">
         <p className="text-red-500 text-lg">❌ Invalid resume data.</p>
