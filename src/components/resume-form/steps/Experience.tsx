@@ -15,7 +15,6 @@ export function ExperienceStep() {
   const {
     register,
     control,
-    formState: { errors },
   } = useFormContext<ResumeFormValues>();
 
   const { fields, append, remove } = useFieldArray({

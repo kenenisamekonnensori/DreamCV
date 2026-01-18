@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { Mail, Lock, Loader2 } from "lucide-react";
 import { useActionState } from "react";
-import { signUpAction, State, StateLogin} from "@/lib/actions";
+import { signUpAction, State } from "@/lib/actions";
 
 import { Tabs, TabsTrigger, TabsContent, TabsList } from "../ui/tabs";
 import { Label } from "../ui/label";

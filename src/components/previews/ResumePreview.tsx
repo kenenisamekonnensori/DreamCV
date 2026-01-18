@@ -1,17 +1,13 @@
 
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Download, Loader2, Printer } from "lucide-react";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { Download, Printer } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRef } from "react";
-import { usePDF } from "react-to-pdf";
 import { ResumePDF } from "../pdf/Modern";
 import { GeneratedResume } from "@/types/GeneratedTypes";
-import Link from "next/link";
 
 
 // ---------------- Visual Preview (on-screen) ----------------
@@ -26,15 +22,10 @@ interface ResumePreviewProps {
 
 
 export function ResumePreview({ data, onBack, variant = "standalone", className }: ResumePreviewProps) {
-  const resumeRef = useRef<HTMLDivElement>(null);
   const fileName = `${data.header.fullName.replace(/\s+/g, "_")}_Resume.pdf`;
-  const [laoding, setLoading] = useState(false);
-
-  
 
   const showToolbar = variant === "standalone" || typeof onBack === "function";
   const showFooter = variant === "standalone";
-  const { toPDF, targetRef } = usePDF({filename: `${data.header.fullName}-resume.pdf`})
 
   return (
     <div
@@ -54,27 +45,17 @@ export function ResumePreview({ data, onBack, variant = "standalone", className 
                 Back
               </Button>
             )}
-            {laoding ? (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...
-              </Button>
-            ) : (   
-              // <Button onClick={() => toPDF()}>
-              //   <Download className="mr-2 h-4 w-4" /> Download PDF
-              // </Button>
-              <Button
-                onClick={async () => {
-                  const blob = await (await import("@react-pdf/renderer")).pdf(<ResumePDF data={data} />).toBlob();
-                  const link = document.createElement("a");
-                  link.href = URL.createObjectURL(blob);
-                  link.download = fileName;
-                  link.click();
-                }}
-              >
-                <Download className="mr-2 h-4 w-4" /> Download PDF
-              </Button>
-
-            )}
+            <Button
+              onClick={async () => {
+                const blob = await (await import("@react-pdf/renderer")).pdf(<ResumePDF data={data} />).toBlob();
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                link.click();
+              }}
+            >
+              <Download className="mr-2 h-4 w-4" /> Download PDF
+            </Button>
           </div>
         </div>
       )}

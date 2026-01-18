@@ -15,7 +15,6 @@ export function ProjectsStep() {
   const {
     register,
     control,
-    formState: { errors },
   } = useFormContext<ResumeFormValues>();
 
   const { fields, append, remove } = useFieldArray({

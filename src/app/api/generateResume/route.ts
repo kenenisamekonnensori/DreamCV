@@ -2,6 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GeneratedResume } from "@/types/GeneratedTypes";
 
 // Basic Zod-like runtime guard to avoid garbage
 type InExp = {
@@ -117,17 +118,17 @@ export async function POST(req: NextRequest) {
       text = text.slice(first, last + 1);
     }
 
-    let json: any = null;
+    let resume: GeneratedResume | null = null;
     let generated = false;
     try {
-      json = JSON.parse(text);
+      resume = JSON.parse(text) as GeneratedResume;
       generated = true;
     } catch (err) {
       console.warn("First JSON parse failed, will attempt a second generation. Error:", err);
     }
 
     // If parsing failed, try a second, stricter generation asking for JSON only
-    if (!json) {
+    if (!resume) {
       try {
         const retryPrompt = `Return ONLY valid JSON that matches the schema exactly. Do not include any explanations or markdown. Schema: ${JSON.stringify(
           schema
@@ -150,7 +151,7 @@ export async function POST(req: NextRequest) {
           retryText = retryText.slice(firstB, lastB + 1);
         }
         try {
-          json = JSON.parse(retryText);
+          resume = JSON.parse(retryText) as GeneratedResume;
           generated = true;
         } catch (err2) {
           console.error("Retry JSON parse failed:", err2, "cleaned:", retryText);
@@ -160,10 +161,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    if (!json) {
+    if (!resume) {
       // Build a minimal JSON from raw text if parsing failed
       console.log("failed to generate at json level; returning fallback built from input")
-      json = {
+      resume = {
         header: {
           fullName: data.fullName,
           headline: data.headline,
@@ -199,7 +200,7 @@ export async function POST(req: NextRequest) {
       };
     }
 
-    return NextResponse.json({ success: true, resume: json, generated });
+    return NextResponse.json({ success: true, resume, generated });
   } catch (e) {
     console.error(e);
     return NextResponse.json({ success: false, error: "Generation failed" }, { status: 500 });

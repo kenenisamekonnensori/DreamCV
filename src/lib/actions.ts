@@ -1,14 +1,11 @@
 'use server'
 
-import { email, z, ZodError } from 'zod';
-import  prisma  from '@/prisma';
+import { z, ZodError } from 'zod';
+import prisma from '@/prisma';
 import bcrypt from 'bcryptjs';
 // import { signIn } from '@/auth';
-import { redirect } from 'next/navigation';
+// import { redirect } from 'next/navigation';
 // import { AuthError } from 'next-auth';
-import { error } from 'console';
-import { signIn } from '@/auth';
-import { AuthError } from 'next-auth';
 
 const FromSchema = z.object({
     name: z.string().min(1, 'Name is required'),

@@ -1,5 +1,5 @@
 // app/resume/preview/page.tsx
-import  ModernTemplate  from "@/components/resume/ModernTemplate";
+import ModernTemplate from "@/components/resume/ModernTemplate";
 import { templates } from "@/lib/templates";
 import { ResumeData } from "../../../types/resume";
 import React from "react";
@@ -27,7 +27,7 @@ export default async function ResumePreview({
   let resumeData: ResumeData;
   try {
     resumeData = JSON.parse(decodeURIComponent(dataParam));
-  } catch (err) {
+  } catch (_err) {
     return (
       <div className="flex h-screen items-center justify-center">
         <p className="text-red-500 text-lg">❌ Invalid resume data.</p>
@@ -42,7 +42,7 @@ export default async function ResumePreview({
   return (
     <html lang="en">
       <head>
-        <title>{resumeData.header.fullName}'s Resume</title>
+        <title>{resumeData.header.fullName}&apos;s Resume</title>
         <meta name="robots" content="noindex" />
       </head>
       <body className="bg-white text-black">

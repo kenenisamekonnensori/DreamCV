@@ -25,7 +25,6 @@ import { ExtrasStep } from "@/components/resume-form/steps/Extras";
 import { ReviewStep } from "@/components/resume-form/steps/Review";
 import { ResumePreview } from "@/components/previews/ResumePreview";
 import { GeneratedResume } from "@/types/GeneratedTypes";
-import { transformFormDataForPreview } from "@/lib/resume-data-transformer";
 
 const DRAFT_KEY = "resume.form.draft.v2";
 
@@ -90,7 +89,7 @@ export default function ResumeFormPage() {
     const isValid = await validateStep();
     if (isValid) {
       if (stepIndex === steps.length - 1) {
-        await methods.handleSubmit(onSubmit)();
+        await handleSubmit(onSubmit)();
       } else {
         setStepIndex((prev) => prev + 1);
       }
@@ -168,7 +167,7 @@ export default function ResumeFormPage() {
       <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-8">
         <FormHeader onSaveDraft={handleSaveDraft} onReset={handleReset} />
         <StepIndicator currentIndex={stepIndex} />
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {renderStep(stepIndex)}
           <FormNavigation
             isSubmitting={isSubmitting}

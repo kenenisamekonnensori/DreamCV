@@ -13,7 +13,6 @@ export function EducationStep() {
   const {
     register,
     control,
-    formState: { errors },
   } = useFormContext<ResumeFormValues>();
 
   const { fields, append, remove } = useFieldArray({
