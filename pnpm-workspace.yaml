@@ -1,4 +1,0 @@
-overrides:
-  react: link:../../../../snap/code/209/.local/share/pnpm/global/5/node_modules/react
-  react-dom: link:../../../../snap/code/209/.local/share/pnpm/global/5/node_modules/react-dom
-  renderer: link:../../../../snap/code/209/.local/share/pnpm/global/5/node_modules/@react-pdf/renderer
