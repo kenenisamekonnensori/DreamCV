@@ -17,7 +17,7 @@ const testimonials = [
   {
     name: "Sarah J.",
     role: "Marketing Strategist",
-    quote: "Tailored perfectly to my career goals.",
+    quote: "Tailored perfectly to my career goals it also helped me land a dream job.",
   },
   {
     name: "David R.",
