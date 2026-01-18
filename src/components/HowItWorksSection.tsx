@@ -7,7 +7,7 @@ import React from "react";
 const steps = [
   {
     title: "Login to DreamCV",
-    description: "Create your account or sign in to unlock the resume builder.",
+    description: "Create your account or if you already have one, sign in to unlock the resume builder.",
     icon: LogIn,
   },
   {
