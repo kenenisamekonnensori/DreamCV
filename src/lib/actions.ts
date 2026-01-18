@@ -1,7 +1,7 @@
 'use server'
 
 import { email, z, ZodError } from 'zod';
-import { prisma } from '@/prisma';
+import  prisma  from '@/prisma';
 import bcrypt from 'bcryptjs';
 // import { signIn } from '@/auth';
 import { redirect } from 'next/navigation';

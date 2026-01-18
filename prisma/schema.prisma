@@ -1,11 +1,13 @@
 
 generator client {
   provider = "prisma-client"  // CHANGED: Was "prisma-client-js"
-  output   = "../src/generated/client" // CHANGED: Moves client out of node_modules
-  engineType = "client"
+  output   = "./generated/prisma/client" // CHANGED: Moves client out of node_modules
 
 }
 
+datasource db {
+  provider = "postgresql"
+}
 enum Role {
   USER
   ADMIN
