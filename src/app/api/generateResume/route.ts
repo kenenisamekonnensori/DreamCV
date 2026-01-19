@@ -1,209 +1,461 @@
-
-
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GeneratedResume } from "@/types/GeneratedTypes";
+import { FormPayload } from "@/types/formPayLoad";
 
-// Basic Zod-like runtime guard to avoid garbage
-type InExp = {
-  role: string; company: string; location?: string; startDate: string; endDate?: string; current?: boolean; highlights: string[]; technologies?: string[];
-};
+/**
+ * Extracts a section body from AI text using headings.
+ */
+function extractSection(
+  text: string,
+  section: string,
+  nextSections: string[]
+) {
+  const start = new RegExp(`\\n${section}\\n`, "i");
+  const startIdx = text.search(start);
+  if (startIdx === -1) return "";
 
-type InEdu = { degree: string; university: string; years: string; details?: string };
+  const body = text.slice(startIdx + section.length + 2);
+  let endIdx = body.length;
 
-type InProj = { name: string; description: string; technologies?: string[]; link?: string };
+  for (const next of nextSections) {
+    const i = body.search(new RegExp(`\\n${next}\\n`, "i"));
+    if (i !== -1 && i < endIdx) endIdx = i;
+  }
 
-type FormPayload = {
-  fullName: string;
-  email: string;
-  phone: string;
-  location: string;
-  headline: string;
-  links: { label: string; url: string }[];
-  summary: string;
-  experiences: InExp[];
-  education: InEdu[];
-  skills: string[];
-  projects?: InProj[];
-  style: "modern" | "minimal" | "classic";
-  targetRole: string;
-};
+  return body.slice(0, endIdx).trim();
+}
+
+/**
+ * Parses bullet points from a section
+ */
+function extractBullets(text: string) {
+  return text
+    .split("\n")
+    .map(l => l.replace(/^[-•*]\s*/, "").trim())
+    .filter(Boolean);
+}
 
 export async function POST(req: NextRequest) {
   try {
     const data = (await req.json()) as FormPayload;
+
     if (!data?.fullName || !data?.email) {
-      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Invalid payload" },
+        { status: 400 }
+      );
     }
 
     const apiKey = process.env.GOOGLE_API_KEY;
     if (!apiKey) {
-      console.error("Missing GOOGLE_API_KEY");
-      return NextResponse.json({ success: false, error: "Missing Google API key" }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: "Missing Google API key" },
+        { status: 500 }
+      );
     }
+
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-    // Ask Gemini to return STRICT JSON that matches our schema
-    const schema = {
-      type: "object",
-      properties: {
-        header: { type: "object", properties: { fullName: { type: "string" }, headline: { type: "string" }, location: { type: "string" }, email: { type: "string" }, phone: { type: "string" }, links: { type: "array", items: { type: "object", properties: { label: { type: "string" }, url: { type: "string" } } } } } },
-        summary: { type: "string" },
-        experiences: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              role: { type: "string" }, company: { type: "string" }, location: { type: "string" }, start: { type: "string" }, end: { type: "string" }, current: { type: "boolean" }, bullets: { type: "array", items: { type: "string" } }, tech: { type: "array", items: { type: "string" } }
-            }
-          }
-        },
-        education: {
-          type: "array",
-          items: { type: "object", properties: { degree: { type: "string" }, university: { type: "string" }, years: { type: "string" }, details: { type: "string" } } }
-        },
-        skills: { type: "array", items: { type: "string" } },
-        projects: { type: "array", items: { type: "object", properties: { name: { type: "string" }, description: { type: "string" }, link: { type: "string" }, technologies: { type: "array", items: { type: "string" } } } } }
-      }
-    } as const;
-
-    const sys = `You are a senior resume writer. Return only valid JSON (no markdown). Keep tone concise, metrics-driven, ATS-friendly.`;
-    const user = {
-      instruction: `Use ${data} to Create a resume for ${data.fullName} and think like professional resume writer for the target role. Keep bullets impactful, start with action verbs, include metrics where possible, avoid first-person pronouns. Target role: ${data.targetRole}. Style: ${data.style} and make it full page.` ,
-      input: data,
-      json_schema: schema,
-      format_rules: [
-        "Use the data given to write the best resume for the target role",
-        "Use 1-5 bullets per experience; prioritize impact.",
-        "Avoid extraneous adjectives; be specific and outcome-focused.",
-        "Keep summary to 3-4 sentences.",
-        "the resume should be full page not two page or half page",
-        "make it ATS-friendly",
-        "Make more modern resume if style is modern, make it simple if style is minimal and make it traditional if style is classic",
-        "Write well structured, with more details",
-        "Write broad and high level points for summary, experiences, education and projects, go deep into details",
-      ]
-    };
-
-    //const { response } = await model.generateContent({ contents: [{ role: "system", parts: [{ text: sys }] }, { role: "user", parts: [{ text: JSON.stringify(user) }] }] });
-    const { response } = await model.generateContent({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: `${sys}\n\n${JSON.stringify(user)}` }]
-        }
-      ]
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
     });
 
-    // const text = response.text();
+    // ---------------- PROMPT (LEAN + PARSABLE) ----------------
+    const prompt = `
+You are a senior professional resume writer.
 
+DO NOT repeat the candidate's name, email, phone, or location.
+Start directly with section headers.
 
-    // const text = response.text();
-    // console.log(text)
-    // // Try parse JSON; fall back to plain text
-    // let json: any = null;
-    // try { json = JSON.parse(text); } catch {}
+Target Role: ${data.targetRole}
+Style: ${data.style}
 
-    let text = response.text().trim();
-    // Remove markdown code fences if present
-    if (text.startsWith("```")) {
-      text = text.replace(/^```(json)?/, "").replace(/```$/, "").trim();
-    }
+===== SUMMARY =====
+Rewrite a 3–4 sentence professional summary.
 
-    // Try to find the first and last curly braces
-    const first = text.indexOf("{");
-    const last = text.lastIndexOf("}");
-    if (first !== -1 && last !== -1) {
-      text = text.slice(first, last + 1);
-    }
+===== SKILLS =====
+Rewrite skills as a concise, ATS-optimized list.
+Deduplicate, normalize naming, and add missing but relevant skills.
 
-    let resume: GeneratedResume | null = null;
-    let generated = false;
-    try {
-      resume = JSON.parse(text) as GeneratedResume;
-      generated = true;
-    } catch (err) {
-      console.warn("First JSON parse failed, will attempt a second generation. Error:", err);
-    }
+===== EXPERIENCE =====
+Rewrite experience bullets.
+Use strong action verbs, metrics where reasonable.
+4–6 bullets per role.
 
-    // If parsing failed, try a second, stricter generation asking for JSON only
-    if (!resume) {
-      try {
-        const retryPrompt = `Return ONLY valid JSON that matches the schema exactly. Do not include any explanations or markdown. Schema: ${JSON.stringify(
-          schema
-        )}\n\nInput: ${JSON.stringify(data)}`;
+===== INPUT =====
+Summary:
+${data.summary}
 
-        const { response: retryResponse } = await model.generateContent({
-          contents: [
-            { role: "system", parts: [{ text: sys }] },
-            { role: "user", parts: [{ text: retryPrompt }] },
-          ],
-        });
+Skills:
+${data.skills.join(", ")}
 
-        let retryText = retryResponse.text().trim();
-        if (retryText.startsWith("```")) {
-          retryText = retryText.replace(/^```(json)?/, "").replace(/```$/, "").trim();
-        }
-        const firstB = retryText.indexOf("{");
-        const lastB = retryText.lastIndexOf("}");
-        if (firstB !== -1 && lastB !== -1) {
-          retryText = retryText.slice(firstB, lastB + 1);
-        }
-        try {
-          resume = JSON.parse(retryText) as GeneratedResume;
-          generated = true;
-        } catch (err2) {
-          console.error("Retry JSON parse failed:", err2, "cleaned:", retryText);
-        }
-      } catch (retryErr) {
-        console.error("Second generation attempt failed:", retryErr);
-      }
-    }
+Experience:
+${data.experiences
+  .map(
+    e => `
+${e.role} at ${e.company}
+${e.highlights.join("; ")}
+`
+  )
+  .join("\n")}
 
-    if (!resume) {
-      // Build a minimal JSON from raw text if parsing failed
-      console.log("failed to generate at json level; returning fallback built from input")
-      resume = {
-        header: {
-          fullName: data.fullName,
-          headline: data.headline,
-          location: data.location,
-          email: data.email,
-          phone: data.phone,
-          links: data.links || [],
-        },
-        summary: data.summary,
-        experiences: data.experiences.map((e) => ({
-          role: e.role,
-          company: e.company,
-          location: e.location || "",
-          start: e.startDate,
-          end: e.current ? "Present" : e.endDate || "",
-          current: !!e.current,
-          bullets: e.highlights || [],
-          tech: e.technologies || [],
-        })),
-        education: data.education.map((ed) => ({
-          degree: ed.degree,
-          university: ed.university,
-          years: ed.years,
-          details: ed.details || "",
-        })),
-        skills: data.skills,
-        projects: (data.projects || []).map((p) => ({
-          name: p.name,
-          description: p.description,
-          link: p.link || "",
-          technologies: p.technologies || [],
-        })),
+===== OUTPUT FORMAT =====
+SUMMARY
+(text)
+
+SKILLS
+(skill list separated by commas)
+
+EXPERIENCE
+Job Title | Company
+- bullet
+- bullet
+`;
+
+    const { response } = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+    });
+
+    const text = response.text().replace(/\r/g, "").trim();
+    console.log("Gemini Output:\n", text);
+
+    // ---------------- PARSE AI OUTPUT ----------------
+    const summary = extractSection(text, "SUMMARY", ["SKILLS", "EXPERIENCE"]);
+    const skillsText = extractSection(text, "SKILLS", ["EXPERIENCE"]);
+    const experienceText = extractSection(text, "EXPERIENCE", []);
+
+    const enhancedSkills = skillsText
+      .split(",")
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    // Split experience blocks
+    const experienceBlocks = experienceText
+      .split(/\n(?=[A-Za-z].*\|)/)
+      .map(b => b.trim())
+      .filter(Boolean);
+
+    // ---------------- MAP EXPERIENCE BACK ----------------
+    const enhancedExperiences = data.experiences.map((exp, index) => {
+      const block = experienceBlocks[index] || "";
+      const bullets = extractBullets(block);
+
+      return {
+        role: exp.role,
+        company: exp.company,
+        location: exp.location || "",
+        start: exp.startDate,
+        end: exp.current ? "Present" : exp.endDate || "",
+        current: !!exp.current,
+        bullets: bullets.length ? bullets : exp.highlights,
+        tech: exp.technologies || [],
       };
+    });
+
+    // ---------------- FINAL RESUME OBJECT ----------------
+    const resume: GeneratedResume = {
+      header: {
+        fullName: data.fullName,
+        headline: data.headline,
+        location: data.location,
+        email: data.email,
+        phone: data.phone,
+        links: data.links || [],
+      },
+      summary: summary || data.summary,
+      experiences: enhancedExperiences,
+      education: data.education.map(ed => ({
+        degree: ed.degree,
+        university: ed.university,
+        years: ed.years,
+        details: ed.details || "",
+      })),
+      skills: enhancedSkills.length ? enhancedSkills : data.skills,
+      projects: (data.projects || []).map(p => ({
+        name: p.name,
+        description: p.description,
+        link: p.link || "",
+        technologies: p.technologies || [],
+      })),
+    };
+
+    return NextResponse.json({
+      success: true,
+      generated: true,
+      resume,
+    });
+  } catch (err: any) {
+    console.error(err);
+
+    if (err?.status === 429) {
+      return NextResponse.json(
+        { success: false, error: "AI busy. Please retry shortly." },
+        { status: 429 }
+      );
     }
 
-    return NextResponse.json({ success: true, resume, generated });
-  } catch (e) {
-    console.error(e);
-    return NextResponse.json({ success: false, error: "Generation failed" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Resume generation failed" },
+      { status: 500 }
+    );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { NextRequest, NextResponse } from "next/server";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
+// import { GeneratedResume } from "@/types/GeneratedTypes";
+// import { FormPayload } from "@/types/formPayLoad";
+// import { buildPrompt } from "./prompt";
+
+// export async function POST(req: NextRequest) {
+//   try {
+//     const data = (await req.json()) as FormPayload;
+//     if (!data?.fullName || !data?.email) {
+//       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+//     }
+
+//     const apiKey = process.env.GOOGLE_API_KEY;
+//     if (!apiKey) {
+//       console.error("Missing GOOGLE_API_KEY");
+//       return NextResponse.json({ success: false, error: "Missing Google API key" }, { status: 500 });
+//     }
+//     const genAI = new GoogleGenerativeAI(apiKey);
+//     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+//     // Ask Gemini to return STRICT JSON that matches our schema
+//     const schema = {
+//       type: "object",
+//       properties: {
+//         header: { type: "object", properties: { fullName: { type: "string" }, headline: { type: "string" }, location: { type: "string" }, email: { type: "string" }, phone: { type: "string" }, links: { type: "array", items: { type: "object", properties: { label: { type: "string" }, url: { type: "string" } } } } } },
+//         summary: { type: "string" },
+//         experiences: {
+//           type: "array",
+//           items: {
+//             type: "object",
+//             properties: {
+//               role: { type: "string" }, company: { type: "string" }, location: { type: "string" }, start: { type: "string" }, end: { type: "string" }, current: { type: "boolean" }, bullets: { type: "array", items: { type: "string" } }, tech: { type: "array", items: { type: "string" } }
+//             }
+//           }
+//         },
+//         education: {
+//           type: "array",
+//           items: { type: "object", properties: { degree: { type: "string" }, university: { type: "string" }, years: { type: "string" }, details: { type: "string" } } }
+//         },
+//         skills: { type: "array", items: { type: "string" } },
+//         projects: { type: "array", items: { type: "object", properties: { name: { type: "string" }, description: { type: "string" }, link: { type: "string" }, technologies: { type: "array", items: { type: "string" } } } } }
+//       }
+//     } as const;
+
+
+//     const prompt = buildPrompt(data);
+
+//     const { response } = await model.generateContent({
+//       contents: [
+//         {
+//           role: "user",
+//           parts: [{ text: prompt }]
+//         }
+//       ]
+//     });
+
+
+//     // let text = response.text().trim();
+//     // // Remove markdown code fences if present
+//     // if (text.startsWith("```")) {
+//     //   text = text.replace(/^```(json)?/, "").replace(/```$/, "").trim();
+//     // }
+
+//     // // Try to find the first and last curly braces
+//     // const first = text.indexOf("{");
+//     // const last = text.lastIndexOf("}");
+//     // if (first !== -1 && last !== -1) {
+//     //   text = text.slice(first, last + 1);
+//     // }
+
+//     // let resume: GeneratedResume | null = null;
+//     // let generated = false;
+//     // try {
+//     //   resume = JSON.parse(text) as GeneratedResume;
+//     //   generated = true;
+//     // } catch (err) {
+//     //   console.warn("First JSON parse failed, will attempt a second generation. Error:", err);
+//     // }
+
+//     const text = response.text().trim();
+
+//     console.log("Generated text:", text);
+
+//     let generated = true;
+//     const resume: GeneratedResume = {
+//       header: {
+//         fullName: data.fullName,
+//         headline: data.headline,
+//         location: data.location,
+//         email: data.email,
+//         phone: data.phone,
+//         links: data.links || [],
+//       },
+//       summary: text.split("\n\n")[0], // or smarter parsing
+//       experiences: data.experiences.map(e => ({
+//         role: e.role,
+//         company: e.company,
+//         location: e.location || "",
+//         start: e.startDate,
+//         end: e.current ? "Present" : e.endDate || "",
+//         current: !!e.current,
+//         bullets: e.highlights,
+//         tech: e.technologies || [],
+//       })),
+//       education: data.education.map(ed => ({
+//         degree: ed.degree,
+//         university: ed.university,
+//         years: ed.years,
+//         details: ed.details || "",
+//       })),
+//       skills: data.skills,
+//       projects: (data.projects || []).map(p => ({
+//         name: p.name,
+//         description: p.description,
+//         link: p.link || "",
+//         technologies: p.technologies || [],
+//       })),
+//     };
+
+    
+//     // if (!resume) {
+//     //   // Build a minimal JSON from raw text if parsing failed
+//     //   console.log("failed to generate at json level; returning fallback built from input")
+//     //   resume = {
+//     //     header: {
+//     //       fullName: data.fullName,
+//     //       headline: data.headline,
+//     //       location: data.location,
+//     //       email: data.email,
+//     //       phone: data.phone,
+//     //       links: data.links || [],
+//     //     },
+//     //     summary: data.summary,
+//     //     experiences: data.experiences.map((e) => ({
+//     //       role: e.role,
+//     //       company: e.company,
+//     //       location: e.location || "",
+//     //       start: e.startDate,
+//     //       end: e.current ? "Present" : e.endDate || "",
+//     //       current: !!e.current,
+//     //       bullets: e.highlights || [],
+//     //       tech: e.technologies || [],
+//     //     })),
+//     //     education: data.education.map((ed) => ({
+//     //       degree: ed.degree,
+//     //       university: ed.university,
+//     //       years: ed.years,
+//     //       details: ed.details || "",
+//     //     })),
+//     //     skills: data.skills,
+//     //     projects: (data.projects || []).map((p) => ({
+//     //       name: p.name,
+//     //       description: p.description,
+//     //       link: p.link || "",
+//     //       technologies: p.technologies || [],
+//     //     })),
+//     //   };
+//     // }
+
+//     return NextResponse.json({ success: true, resume, generated });
+//   } catch (e) {
+//     console.error(e);
+//     return NextResponse.json({ success: false, error: "Generation failed" }, { status: 500 });
+//   }
+// }
 
