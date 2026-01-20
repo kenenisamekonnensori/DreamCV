@@ -8,6 +8,7 @@ import { Download, Printer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ResumePDF } from "../pdf/Modern";
 import { GeneratedResume } from "@/types/GeneratedTypes";
+import { resume } from "react-dom/server";
 
 
 // ---------------- Visual Preview (on-screen) ----------------

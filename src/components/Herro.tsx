@@ -50,6 +50,14 @@ export function Hero() {
                         >
                             <Link href="/templates">Explore templates</Link>
                         </Button>
+                        <Button
+                            variant="secondary"
+                            size="lg"
+                            className="w-full rounded-xl px-8 py-6 text-base shadow-sm transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto"
+                            asChild
+                        >
+                            <Link href="/resume/score">Score your resume</Link>
+                        </Button>
                     </div>
 
                     <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground lg:justify-start">
