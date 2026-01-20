@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
@@ -57,12 +57,21 @@ export default function ResumeFormPage() {
     null
   );
   const router = useRouter();
-  const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push("/login");
-    },
-  });
+  const { status } = useSession();
+  // const { status } = useSession({
+  //   required: true,
+  //   onUnauthenticated() {
+  //     router.push("/login");
+  //   },
+  // });
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/login?callbackUrl=/resume/generate");
+    }
+  }, [status, router]);
+
+  
 
   const methods = useForm<ResumeFormValues>({
     resolver: zodResolver(ResumeFormSchema),
