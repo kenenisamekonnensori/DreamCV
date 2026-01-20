@@ -25,12 +25,12 @@ export function ResumeScorePreviewCard({
         </p>
       </CardHeader>
       <CardContent>
-        <div className="relative flex min-h-[420px] flex-col overflow-hidden rounded-xl border border-border/60 bg-background/60">
+        <div className="relative flex min-h-105 flex-col overflow-hidden rounded-xl border border-border/60 bg-background/60">
           {previewUrl ? (
             <iframe
               title="Resume preview"
               src={previewUrl}
-              className="h-[460px] w-full bg-white sm:h-[560px]"
+              className="h-115 w-full bg-white sm:h-140"
             />
           ) : (
             <div className="flex h-full flex-1 flex-col items-center justify-center gap-3 px-6 py-10 text-center text-sm text-muted-foreground">

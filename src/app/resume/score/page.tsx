@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { RotateCcw } from "lucide-react";
 import { ResumeScoreUploadCard } from "@/components/resume-score/ResumeScoreUploadCard";
 import { ResumeScorePreviewCard } from "@/components/resume-score/ResumeScorePreviewCard";
@@ -12,8 +12,24 @@ import { ResumeScoreErrorState } from "@/components/resume-score/ResumeScoreErro
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useResumeScore } from "@/hooks/useResumeScore";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/dist/client/components/navigation";
 
 export default function ResumeScorePage() {
+ 
+	const router = useRouter();
+	
+	const session = useSession();
+	
+	useEffect(() => {
+		if (session.status === "unauthenticated") {
+			router.replace("/login?callbackUrl=/resume/score");
+		}
+	}, [session.status, router]);
+
+	if (session.status === "loading") {
+		return <div>Loading...</div>;
+	}
 	const inputId = "resume-score-upload";
 	const { file, previewUrl, status, data, error, analyzeResume, retry, clear } =
 		useResumeScore();
@@ -26,6 +42,10 @@ export default function ResumeScorePage() {
 	);
 
 	const isAnalyzing = status === "analyzing";
+
+	// if (loading === "loading") {
+
+	// }
 
 	return (
 		<section className="mx-auto w-full max-w-6xl space-y-6 px-4 pb-12 sm:px-6 lg:px-8">
