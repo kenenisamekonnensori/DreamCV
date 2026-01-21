@@ -64,7 +64,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/resume/optimize" className="text-sm text-gray-400 hover:text-blue-400 transition-colors">
+                <Link href="/resume/score" className="text-sm text-gray-400 hover:text-blue-400 transition-colors">
                   Resume Optimizer
                 </Link>
               </li>
