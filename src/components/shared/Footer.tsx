@@ -97,7 +97,7 @@ export default function Footer() {
               </motion.a>
 
               <motion.a
-                href="https://www.linkedin.com/in/kenenisa-mekonnen-03414b34a/"
+                href="https://www.linkedin.com/in/kenenisamekonnen/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn"
@@ -126,7 +126,7 @@ export default function Footer() {
       <div className="border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-6 py-4 text-center text-sm text-gray-500">
           © {currentYear} DreamCV. Built by Kenenisa Mekonnen. {" "}
-          <a href="https://kenenisa.tech" className="text-gray-300 hover:text-blue-400 transition-colors">
+          <a href="https://kenenisa.dev" className="text-gray-300 hover:text-blue-400 transition-colors">
             Visit my website
           </a>
           .
