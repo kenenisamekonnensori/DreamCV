@@ -9,10 +9,10 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { SignOut } from "../sign-out";
 
 const navigation = [
-  { href: "#features", label: "Features" },
-  { href: "#template", label: "Templates" },
-  { href: "#pricing", label: "Pricing" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#features", label: "Features" },
+  { href: "/templates", label: "Templates" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 export default function NavBar() {
@@ -53,7 +53,7 @@ export default function NavBar() {
           {navigation.map((item) => (
             <Link
               key={item.href}
-              href={`/${item.href}`}
+              href={item.href}
               className="text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
             >
               {item.label}
@@ -71,7 +71,7 @@ export default function NavBar() {
                 <Link href="/dashboard">Dashboard</Link>
               </Button>
               <Button asChild size="sm" className="hidden sm:inline-flex">
-                <Link href="/resume/generate">Create Resume</Link>
+                <Link href="/generate">Create Resume</Link>
               </Button>
               <SignOut size="sm" />
             </div>

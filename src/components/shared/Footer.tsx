@@ -59,7 +59,7 @@ export default function Footer() {
             <h4 className="text-sm font-semibold text-gray-200">Resources</h4>
             <ul className="space-y-2 mt-2">
               <li>
-                <Link href="/resume/generate" className="text-sm text-gray-400 hover:text-blue-400 transition-colors">
+                <Link href="/generate" className="text-sm text-gray-400 hover:text-blue-400 transition-colors">
                   Resume Generator
                 </Link>
               </li>

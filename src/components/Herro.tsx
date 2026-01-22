@@ -38,7 +38,7 @@ export function Hero() {
                             className="group relative w-full overflow-hidden rounded-xl px-8 py-6 text-base font-semibold shadow-md transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto"
                             asChild
                         >
-                            <Link href="/resume/generate">
+                            <Link href="/generate">
                                 <span className="relative z-10">Create your resume</span>
                             </Link>
                         </Button>

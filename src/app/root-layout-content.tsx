@@ -7,7 +7,7 @@ import Footer from "@/components/shared/Footer";
 import { Providers } from "./providers"; // Your SessionProvider wrapper
 import { cn } from "@/lib/utils";
 
-const publicRoutes = ["/login", "/signup", "/resume/generate"]; // Paths where NavBar should NOT show up
+const publicRoutes = ["/login", "/signup", "/resume/generate", "/generate"]; // Paths where NavBar should NOT show up
 // Add any other routes where you explicitly don't want the Navbar.
 // This list could also be inverse: `protectedRoutes` where Navbar *should* show up.
 

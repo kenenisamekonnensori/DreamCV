@@ -1,14 +1,14 @@
 
 "use client";
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Download, Printer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ResumePDF } from "../pdf/Modern";
 import { GeneratedResume } from "@/types/GeneratedTypes";
-import { resume } from "react-dom/server";
+import { templates } from "@/lib/templates";
+import { defaultTemplateId } from "@/lib/resume-templates";
+import { useSearchParams } from "next/navigation";
 
 
 // ---------------- Visual Preview (on-screen) ----------------
@@ -19,10 +19,14 @@ interface ResumePreviewProps {
   onBack?: () => void;
   variant?: ResumePreviewVariant;
   className?: string;
+  templateId?: string;
 }
 
 
-export function ResumePreview({ data, onBack, variant = "standalone", className }: ResumePreviewProps) {
+export function ResumePreview({ data, onBack, variant = "standalone", className, templateId }: ResumePreviewProps) {
+  const searchParams = useSearchParams();
+  const resolvedTemplateId = templateId ?? searchParams.get("template") ?? defaultTemplateId;
+  const TemplateComponent = templates[resolvedTemplateId] || templates[defaultTemplateId];
   const fileName = `${data.header.fullName.replace(/\s+/g, "_")}_Resume.pdf`;
 
   const showToolbar = variant === "standalone" || typeof onBack === "function";
@@ -62,112 +66,23 @@ export function ResumePreview({ data, onBack, variant = "standalone", className 
       )}
 
       {/* Resume content */}
-      <div >
-        <Card
+      <div>
+        <div
           className={cn(
-            "print:shadow-none",
-            variant === "embedded"
-            ? "border border-border/60 shadow-sm"
-            : "shadow-xl"
+            "relative overflow-hidden rounded-3xl bg-muted/20 p-4 print:p-0 print:bg-white",
+            variant === "embedded" ? "shadow-sm" : "shadow-xl",
+            className
           )}
         >
-          <CardHeader className="pb-2">
-            <CardTitle className="text-2xl">{data.header.fullName}</CardTitle>
-            <p className="text-sm text-muted-foreground">{data.header.headline}</p>
-            <p className="text-xs text-muted-foreground">
-              {data.header.location} • {data.header.email} • {data.header.phone}
-            </p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {(data.header.links || []).map((l, i) => (
-                <a
-                  key={i}
-                  href={l.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-blue-600 hover:underline"
-                >
-                  {l.label}
-                </a>
-              ))}
-            </div>
-
-          </CardHeader>
-
-          <CardContent className="space-y-6">
-            <section>
-              <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">SUMMARY</h3>
-              <Separator className="my-2" />
-              <p className="leading-relaxed text-sm">{data.summary}</p>
-            </section>
-
-            <section>
-              <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">EXPERIENCE</h3>
-              <Separator className="my-2" />
-              <div className="space-y-4">
-                {data.experiences?.map((e, i) => (
-                  <div key={i}>
-                    <p className="text-sm font-medium">{e.role} • {e.company}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {e.location ? e.location + " • " : ""}
-                      {e.start} – {e.end}
-                    </p>
-                    <ul className="mt-2 list-disc pl-5 text-sm leading-snug">
-                      {(e.bullets || []).slice(0, 6).map((b, j) => (
-                        <li key={j}>{b}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section>
-              <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">EDUCATION</h3>
-              <Separator className="my-2" />
-              <div className="space-y-3">
-                {data.education?.map((ed, i) => (
-                  <div key={i}>
-                    <p className="text-sm font-medium">{ed.degree} • {ed.university}</p>
-                    <p className="text-xs text-muted-foreground">{ed.years}</p>
-                    {ed.details && <p className="text-sm">{ed.details}</p>}
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section>
-              <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">SKILLS</h3>
-              <Separator className="my-2" />
-              <div className="flex flex-wrap gap-2">
-                {(data.skills || []).map((s, i) => (
-                  <span key={i}>{s}</span>
-                ))}
-              </div>
-            </section>
-
-            {data.projects && data.projects.length > 0 && (
-              <section>
-                <h3 className="text-sm font-semibold tracking-wide text-muted-foreground">PROJECTS</h3>
-                <Separator className="my-2" />
-                <div className="space-y-3">
-                  {data.projects.map((p, i) => (
-                    <div key={i}>
-                      <p className="text-sm font-medium">{p.name}</p>
-                      <p className="text-sm">{p.description}</p>
-                      <div>
-                        Tech Stacks:
-                        {(p.technologies || []).map((tech, idx) => (
-                          <span key={idx} className="text-xs bg-gray-200 rounded-full px-2 py-1 mr-1">{tech}</span>
-                        ))}
-                      </div>
-                      <a href={p.link} className="text-xs text-blue-600 hover:underline">View Project</a>
-                    </div>
-                  ))}
-                </div>
-              </section>
+          <div
+            className={cn(
+              "origin-top-left",
+              variant === "embedded" ? "scale-[0.6] sm:scale-[0.7]" : "scale-100"
             )}
-          </CardContent>
-        </Card>
+          >
+            <TemplateComponent data={data} className="shadow-none" />
+          </div>
+        </div>
       </div>
 
       {/* Footer */}

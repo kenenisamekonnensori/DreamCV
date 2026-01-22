@@ -2,63 +2,28 @@
 "use client";
 
 import React from "react";
-
-export interface ResumeLink {
-  label: string;
-  url: string;
-}
-
-export interface ResumeExperience {
-  company: string;
-  role: string;
-  location?: string;
-  start: string;
-  end: string;
-  bullets?: string[];
-}
-
-export interface ResumeEducation {
-  degree: string;
-  university: string;
-  years: string;
-  details?: string;
-}
-
-export interface ResumeProject {
-  name: string;
-  description: string;
-  link?: string;
-}
-
-export interface ResumeData {
-  header: {
-    fullName: string;
-    headline: string;
-    location?: string;
-    email: string;
-    phone?: string;
-    links?: ResumeLink[];
-  };
-  summary: string;
-  experiences?: ResumeExperience[];
-  education?: ResumeEducation[];
-  skills?: string[];
-  projects?: ResumeProject[];
-}
+import { cn } from "@/lib/utils";
+import { GeneratedResume } from "@/types/GeneratedTypes";
 
 interface ModernTemplateProps {
-  data: ResumeData;
+  data: GeneratedResume;
+  className?: string;
 }
 
 /**
  * ModernTemplate
  * A clean, A4-friendly resume layout with real text + clickable links.
  */
-const ModernTemplate: React.FC<ModernTemplateProps> = ({ data }) => {
+const ModernTemplate: React.FC<ModernTemplateProps> = ({ data, className }) => {
   const { header, summary, experiences, education, skills, projects } = data;
 
   return (
-    <div className="w-[210mm] min-h-[297mm] bg-white text-gray-800 font-sans p-10 mx-auto border border-gray-300 shadow-sm">
+    <div
+      className={cn(
+        "w-[210mm] min-h-[297mm] bg-white text-gray-800 font-sans p-10 mx-auto border border-gray-300 shadow-sm",
+        className
+      )}
+    >
       {/* Header */}
       <header className="border-b pb-4 mb-4">
         <h1 className="text-3xl font-bold text-gray-900">

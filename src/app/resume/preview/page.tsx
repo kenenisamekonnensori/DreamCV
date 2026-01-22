@@ -1,8 +1,7 @@
 // app/resume/preview/page.tsx
-import ModernTemplate from "@/components/resume/ModernTemplate";
 import { templates } from "@/lib/templates";
-import { ResumeData } from "../../../types/resume";
 import React from "react";
+import { GeneratedResume } from "@/types/GeneratedTypes";
 
 type PreviewSearchParams = Record<string, string | undefined>;
 
@@ -27,7 +26,7 @@ export default async function ResumePreview({
   }
 
   // Step 2: Decode and parse data
-  let resumeData: ResumeData;
+  let resumeData: GeneratedResume;
   try {
     resumeData = JSON.parse(decodeURIComponent(dataParam));
   } catch {
@@ -39,7 +38,7 @@ export default async function ResumePreview({
   }
 
   // Step 3: Get the correct template component
-  const TemplateComponent = templates[template] || ModernTemplate;
+  const TemplateComponent = templates[template] || templates.modern;
 
   // Step 4: Render full-page HTML for Puppeteer
   return (

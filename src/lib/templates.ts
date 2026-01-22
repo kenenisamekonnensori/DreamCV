@@ -1,12 +1,19 @@
 // lib/templates.ts
+import type { GeneratedResume } from "@/types/GeneratedTypes";
 import ModernTemplate from "@/components/resume/ModernTemplate";
-import { GeneratedResume } from "@/types/GeneratedTypes";
-// Future templates can be imported here
-// import { ClassicTemplate } from "@/components/resume/ClassicTemplate";
-// import { MinimalTemplate } from "@/components/resume/MinimalTemplate";
+import MinimalATSTemplate from "@/components/resume/MinimalATSTemplate";
+import ExecutiveTemplate from "@/components/resume/ExecutiveTemplate";
+import CreativeTemplate from "@/components/resume/CreativeTemplate";
+import AcademicTemplate from "@/components/resume/AcademicTemplate";
+import CompactTemplate from "@/components/resume/CompactTemplate";
 
-export const templates: Record<string, React.FC<{ data: GeneratedResume }>> = {
+export type ResumeTemplateComponent = React.FC<{ data: GeneratedResume; className?: string }>;
+
+export const templates: Record<string, ResumeTemplateComponent> = {
   modern: ModernTemplate,
-  // classic: ClassicTemplate,
-  // minimal: MinimalTemplate,
+  "minimal-ats": MinimalATSTemplate,
+  executive: ExecutiveTemplate,
+  creative: CreativeTemplate,
+  academic: AcademicTemplate,
+  compact: CompactTemplate,
 };
