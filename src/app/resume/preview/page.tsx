@@ -3,17 +3,21 @@ import { templates } from "@/lib/templates";
 import React from "react";
 import { GeneratedResume } from "@/types/GeneratedTypes";
 
-type PreviewSearchParams = Record<string, string | undefined>;
+type PreviewSearchParams = Record<string, string | string[] | undefined>;
 
-export default async function ResumePreview({
+export default function ResumePreview({
   searchParams,
 }: {
-  searchParams: Promise<PreviewSearchParams>;
+  searchParams: PreviewSearchParams;
 }) {
-  const resolvedParams = await searchParams;
   // Step 1: Read params
-  const template = resolvedParams.template || "modern";
-  const dataParam = resolvedParams.data;
+  const templateParam = Array.isArray(searchParams.template)
+    ? searchParams.template[0]
+    : searchParams.template;
+  const dataParam = Array.isArray(searchParams.data)
+    ? searchParams.data[0]
+    : searchParams.data;
+  const template = templateParam || "modern";
 
   if (!dataParam) {
     return (
