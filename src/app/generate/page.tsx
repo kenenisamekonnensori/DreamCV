@@ -3,6 +3,7 @@ import ResumeFormPage from "@/components/resume-form/ResumeFormPage";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Generate Resume",
