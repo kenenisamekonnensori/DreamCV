@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ResumeFormPage from "@/components/resume-form/ResumeFormPage";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Generate Resume",
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function GenerateResumePage() {
-  return <ResumeFormPage />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResumeFormPage />
+    </Suspense>
+  )
 }
